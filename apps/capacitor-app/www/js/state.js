@@ -1,0 +1,65 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   state.js — 全局状态管理
+   所有共享状态集中在此，View 和 Service 均可读写。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const state = {
+  token: localStorage.getItem("dayorder.token") || "",
+  user: null,
+  view: "today",
+  selectedDate: todayISO(),
+  calendarYear: new Date().getFullYear(),
+  calendarMonth: new Date().getMonth() + 1,
+  monthData: null,
+  dayDetail: null,
+  tags: [],
+  recordTypes: [],
+  records: [],
+  journals: [],
+  journalVersions: [],
+  dailyTemplates: [],
+  rangeCategories: [],
+  rangeReminders: [],
+  milestoneDays: [],
+  importantDates: [],
+  profile: null,
+  storages: [],
+  activeStorageId: null,
+  recordFormTypeId: "",
+  recordTypeModal: false,
+  journalMode: "edit",
+  journalSearch: "",
+  journalTagFilter: "",
+  journalAutosaveStatus: "已保存",
+  filters: {
+    type: "all",
+    tagId: "",
+  },
+  edit: {
+    tag: null,
+    recordType: null,
+    record: null,
+    journal: null,
+    dailyTemplate: null,
+    rangeCategory: null,
+    rangeReminder: null,
+    milestoneDay: null,
+  },
+  reminderEditor: null,
+  selectedRangeCategory: "today",
+  importantDateFrequency: "yearly",
+  confirmDialog: null,
+  toast: "",
+  loading: false,
+  weatherCities: [],
+  weatherData: [],
+  weatherLoading: false,
+  weatherError: "",
+  weatherDialog: false,
+  nowStemsBranches: null,
+
+  // 云端同步状态
+  syncStatus: "offline", // 'online' | 'offline' | 'syncing' | 'synced' | 'error'
+  syncMessage: "",
+  backupInfo: null,
+};

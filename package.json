@@ -1,0 +1,70 @@
+{
+  "name": "dayorder-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DayOrder desktop shell with a local FastAPI backend.",
+  "main": "apps/electron/src/main.js",
+  "author": "DayOrder",
+  "scripts": {
+    "desktop:dev": "electron .",
+    "build:backend": "cd core/backend && ..\..\.venv\\Scripts\\python.exe -m PyInstaller --clean --noconfirm --onefile --name dayorder-backend dayorder_backend.py --hidden-import app.models",
+    "dist:win": "npm run build:backend && electron-builder --win nsis",
+    "dist:win:mirror": "set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/&& npm run dist:win"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.dayorder.desktop",
+    "productName": "日序",
+    "artifactName": "${productName}-Setup-${version}.${ext}",
+    "directories": {
+      "output": "apps/electron/dist"
+    },
+    "files": [
+      "apps/electron/src/**",
+      "package.json",
+      "assets/dayorder.ico",
+      "assets/dayorder.png"
+    ],
+    "extraResources": [
+      {
+        "from": "core/backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!data/**",
+          "!uvicorn.*.log"
+        ]
+      },
+      {
+        "from": "core/frontend",
+        "to": "frontend"
+      },
+      {
+        "from": "assets/dayorder.ico",
+        "to": "assets/dayorder.ico"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/dayorder.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "日序",
+      "include": "apps/electron/build/installer.nsh"
+    }
+  }
+}
