@@ -113,59 +113,72 @@ function trendChart(trend, period) {
 
 /* ── 任务用时明细（左右栏：每日任务 / 近期任务，含折叠子任务） ── */
 
+/* ── 任务用时明细（折叠式：分类 → 任务，左右栏） ── */
+
 function statsDetailBreakdown(stats) {
   const dailyTasks = stats.daily_tasks || [];
-  const rangeReminders = stats.range_reminders || [];
-  if (!dailyTasks.length && !rangeReminders.length) return "";
+  const rangeCategories = stats.range_categories || [];
+  if (!dailyTasks.length && !rangeCategories.length) return "";
 
   return `
     <div class="stats-detail">
-      ${statsDetailCol("每日任务用时", dailyTasks, "daily_task")}
-      ${statsDetailCol("近期任务用时", rangeReminders, "range_reminder")}
+      ${statsFoldCol("每日任务用时", dailyTasks, "daily_task")}
+      ${statsFoldCol("近期任务用时", rangeCategories, "range_category")}
     </div>
   `;
 }
 
-function statsDetailCol(title, tasks, taskType) {
-  if (!tasks.length) {
+function statsFoldCol(title, items, itemType) {
+  if (!items.length) {
     return `
       <div class="stats-detail-col">
         <div class="stats-detail-col-head">${title}</div>
         <div class="stats-detail-list">
-          <div class="stats-detail-item" style="color:var(--muted);justify-content:center;">暂无数据</div>
+          <div class="stats-detail-empty">暂无数据</div>
         </div>
       </div>
     `;
   }
 
-  const maxSec = Math.max(...tasks.map(t => t.total_seconds || 0), 1);
-  const sorted = [...tasks].sort((a, b) => (b.total_seconds || 0) - (a.total_seconds || 0));
+  const maxSec = Math.max(...items.map(t => t.total_seconds || 0), 1);
 
   return `
     <div class="stats-detail-col">
       <div class="stats-detail-col-head">${title}</div>
       <div class="stats-detail-list">
-        ${sorted.map(t => {
-          const mins = Math.floor((t.total_seconds || 0) / 60);
-          const pct = Math.round((t.total_seconds || 0) / maxSec * 100);
-          const hasSub = t.sub_tasks && t.sub_tasks.length > 0;
+        ${items.map((item, idx) => {
+          const mins = Math.floor((item.total_seconds || 0) / 60);
+          const pct = Math.round((item.total_seconds || 0) / maxSec * 100);
+          const hasSub = item.sub_tasks && item.sub_tasks.length > 0;
+          const name = item.category_title || item.task_title || '未命名';
+          const foldId = `fold-${itemType}-${idx}`;
+
           return `
-            <div class="stats-detail-item" data-task-id="${t.task_id}" data-task-type="${taskType}">
-              <span class="stats-detail-item-name">${escapeHtml(t.task_title || '未命名')}</span>
-              <span class="stats-detail-item-time">${mins}分钟</span>
-              <div class="stats-detail-item-bar">
-                <div class="stats-detail-item-bar-fill" style="width:${pct}%"></div>
+            <div class="stats-fold-group">
+              <div class="stats-fold-parent" data-action="toggleStatsFold" data-fold="${foldId}">
+                <span class="stats-fold-arrow" id="${foldId}-arrow">▶</span>
+                <span class="stats-detail-item-name">${escapeHtml(name)}</span>
+                <span class="stats-detail-item-time">${mins}分钟</span>
+                <div class="stats-detail-item-bar">
+                  <div class="stats-detail-item-bar-fill" style="width:${pct}%"></div>
+                </div>
+              </div>
+              <div class="stats-fold-children" id="${foldId}-children" style="display:none">
+                ${hasSub ? item.sub_tasks.map(sub => {
+                  const subMins = Math.floor((sub.total_seconds || 0) / 60);
+                  const subPct = Math.round((sub.total_seconds || 0) / maxSec * 100);
+                  return `
+                    <div class="stats-fold-child">
+                      <span class="stats-detail-item-name">${escapeHtml(sub.task_title || '未命名')}</span>
+                      <span class="stats-detail-item-time">${subMins}分钟</span>
+                      <div class="stats-detail-item-bar">
+                        <div class="stats-detail-item-bar-fill" style="width:${subPct}%"></div>
+                      </div>
+                    </div>
+                  `;
+                }).join("") : `<div class="stats-fold-child" style="color:var(--muted);justify-content:center;">暂无子任务</div>`}
               </div>
             </div>
-            ${hasSub ? t.sub_tasks.map(sub => {
-              const subMins = Math.floor((sub.total_seconds || 0) / 60);
-              return `
-                <div class="stats-detail-item stats-detail-sub">
-                  <span class="stats-detail-item-name">${escapeHtml(sub.task_title || '未命名')}</span>
-                  <span class="stats-detail-item-time">${subMins}分钟</span>
-                </div>
-              `;
-            }).join("") : ""}
           `;
         }).join("")}
       </div>
@@ -173,42 +186,28 @@ function statsDetailCol(title, tasks, taskType) {
   `;
 }
 
-/* ── 分类柱状图 ── */
+/* ── 分类时长柱状图（纯时长） ── */
 
 function statsBarChart(stats) {
   const categories = stats.range_categories || [];
-  const completions = stats.category_completions || [];
-  if (!categories.length && !completions.length) return "";
+  if (!categories.length) return "";
 
-  // 合并分类数据：用时 + 完成数
-  const catMap = {};
-  for (const c of categories) {
-    const cid = c.category_id || c.task_id;
-    if (!catMap[cid]) catMap[cid] = { title: c.category_title || c.task_title || '未分类', minutes: 0, completed: 0, total: 0 };
-    catMap[cid].minutes += Math.floor((c.total_seconds || 0) / 60);
-  }
-  for (const c of completions) {
-    const cid = c.category_id || c.task_id;
-    if (!catMap[cid]) catMap[cid] = { title: c.category_title || c.task_title || '未分类', minutes: 0, completed: 0, total: 0 };
-    catMap[cid].completed = c.completed_count || 0;
-    catMap[cid].total = c.total_count || 0;
-  }
-
-  const items = Object.values(catMap);
-  if (!items.length) return "";
+  const items = categories.map(c => ({
+    title: c.category_title || c.task_title || '未分类',
+    minutes: Math.floor((c.total_seconds || 0) / 60),
+  })).sort((a, b) => b.minutes - a.minutes);
 
   const maxMin = Math.max(...items.map(i => i.minutes), 1);
 
   return `
     <div class="stats-bar-section">
-      <div class="stats-bar-title">分类统计</div>
+      <div class="stats-bar-title">分类时长</div>
       ${items.map(item => `
         <div class="stats-bar-row">
           <span class="stats-bar-label">${escapeHtml(item.title)}</span>
           <div class="stats-bar-track">
-            <div class="stats-bar-fill" style="width:${Math.round(item.minutes / maxMin * 100)}%">${item.minutes > 0 ? item.minutes + 'm' : ''}</div>
+            <div class="stats-bar-fill" style="width:${Math.max(Math.round(item.minutes / maxMin * 100), 2)}%">${item.minutes > 0 ? item.minutes + 'm' : ''}</div>
           </div>
-          <span class="stats-bar-val">${item.completed}/${item.total} 完成</span>
         </div>
       `).join("")}
     </div>

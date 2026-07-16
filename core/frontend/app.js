@@ -2044,6 +2044,9 @@ async function handleAction(target) {
   if (action === "shiftTimeStats") {
     shiftTimeStats(parseInt(target.dataset.direction));
   }
+  if (action === "toggleStatsFold") {
+    toggleStatsFold(target.dataset.fold);
+  }
   if (action === "toggleStatsCollapse") {
     toggleStatsCollapse(target.dataset.key);
   }

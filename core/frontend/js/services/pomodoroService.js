@@ -253,3 +253,16 @@ function toggleStatsCollapse(key) {
   state.timeStatsCollapsed[key] = !state.timeStatsCollapsed[key];
   render();
 }
+
+function toggleStatsFold(foldId) {
+  const children = document.getElementById(foldId + '-children');
+  const arrow = document.getElementById(foldId + '-arrow');
+  if (!children || !arrow) return;
+  if (children.style.display === 'none') {
+    children.style.display = 'block';
+    arrow.classList.add('open');
+  } else {
+    children.style.display = 'none';
+    arrow.classList.remove('open');
+  }
+}

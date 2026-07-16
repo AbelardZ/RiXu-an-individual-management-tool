@@ -1815,7 +1815,7 @@ a {
   text-align: center;
 }
 
-/* ── 任务用时明细 ── */
+/* ── 任务用时明细（折叠式） ── */
 
 .stats-detail {
   margin-top: 16px;
@@ -1841,21 +1841,59 @@ a {
 }
 
 .stats-detail-list {
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
-.stats-detail-item {
+.stats-detail-empty {
+  padding: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 折叠组 */
+.stats-fold-group {
+  border-bottom: 1px solid var(--neutral-9);
+}
+.stats-fold-group:last-child {
+  border-bottom: none;
+}
+
+.stats-fold-parent {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: 13px;
   cursor: pointer;
   transition: background 0.15s;
+  gap: 8px;
+}
+.stats-fold-parent:hover {
+  background: var(--surface-hover);
 }
 
-.stats-detail-item:hover {
-  background: var(--surface-hover);
+.stats-fold-arrow {
+  font-size: 10px;
+  color: var(--muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+}
+.stats-fold-arrow.open {
+  transform: rotate(90deg);
+}
+
+.stats-fold-children {
+  background: var(--neutral-9);
+}
+
+.stats-fold-child {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px 8px 38px;
+  font-size: 12px;
+  gap: 8px;
 }
 
 .stats-detail-item-name {
@@ -1869,7 +1907,6 @@ a {
 .stats-detail-item-time {
   color: var(--muted);
   font-size: 12px;
-  margin-left: 12px;
   flex-shrink: 0;
 }
 
@@ -1878,7 +1915,6 @@ a {
   height: 6px;
   background: var(--neutral-8);
   border-radius: 3px;
-  margin-left: 8px;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -1889,18 +1925,7 @@ a {
   border-radius: 3px;
 }
 
-.stats-detail-sub {
-  padding-left: 24px;
-  font-size: 12px;
-  background: var(--neutral-9);
-}
-
-.stats-detail-sub .stats-detail-item-name {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* ── 分类柱状图 ── */
+/* ── 分类时长柱状图 ── */
 
 .stats-bar-section {
   margin-top: 16px;
@@ -1955,13 +1980,6 @@ a {
   font-size: 11px;
   color: #fff;
   min-width: 0;
-}
-
-.stats-bar-val {
-  width: 48px;
-  font-size: 12px;
-  color: var(--muted);
-  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

@@ -353,7 +353,7 @@ def get_time_stats(
         TaskCompletionStats(**v) for v in cat_completed.values()
     ]
 
-    # 为 range_reminders 填充子任务明细
+    # 为 range_reminders 填充标题和分类信息
     for stats in range_task_stats.values():
         reminder = db.get(RangeReminder, stats.task_id)
         if reminder:
@@ -369,6 +369,13 @@ def get_time_stats(
         template = db.get(DailyTaskTemplate, stats.task_id)
         if template:
             stats.task_title = template.title
+
+    # 将 range_reminders 子任务挂到对应分类下
+    for stats in category_stats.values():
+        cid = stats.category_id
+        if cid:
+            subs = [s for s in range_task_stats.values() if s.category_id == cid]
+            stats.sub_tasks = subs
 
     # 折线图趋势数据
     trend = _build_trend(db, current_user.id, period, start, end)
