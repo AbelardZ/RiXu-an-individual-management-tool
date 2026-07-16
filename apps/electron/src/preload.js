@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+contextBridge.exposeInMainWorld("__DAYORDER_ELECTRON__", true);
+
 contextBridge.exposeInMainWorld("dayOrderDesktop", {
   getState: () => ipcRenderer.invoke("desktop:get-state"),
   openDefaultWorkspace: () => ipcRenderer.invoke("desktop:open-default"),

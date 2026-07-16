@@ -910,16 +910,12 @@ function showSplashThenRender() {
 
 function resolveAssetUrl(url) {
   if (!url) return "";
-  // Capacitor 移动端
   if (typeof CapacitorPlatform !== 'undefined') {
     return CapacitorPlatform.resolveUrl(url);
   }
-  // 相对路径资源（头像、上传文件等）：补全为云端绝对 URL
-  if (url.startsWith('/api/files/') || url.startsWith('/uploads/')) {
-    // 本地开发服务器端口 8000，Electron 中端口随机（如 6552）
-    if (window.location.port !== '8000') {
-      return "http://39.104.75.202" + url;
-    }
+  // Electron 桌面端：补全云端 URL
+  if ((url.startsWith('/api/') || url.startsWith('/uploads/')) && window.__DAYORDER_ELECTRON__) {
+    return "http://39.104.75.202" + url;
   }
   return url;
 }
