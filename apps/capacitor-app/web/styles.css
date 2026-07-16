@@ -6863,10 +6863,10 @@ a {
   place-items: center;
   padding: 28px;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(0, 120, 212, 0.1), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(107, 63, 201, 0.08), transparent 60%),
-    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(0, 183, 195, 0.05), transparent 60%),
-    linear-gradient(180deg, #e8edf5 0%, #f0edf5 45%, #f5f2ed 100%);
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(0, 120, 212, 0.08), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(0, 103, 192, 0.05), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(71, 158, 245, 0.04), transparent 60%),
+    linear-gradient(180deg, #e8eef5 0%, #eef3f8 45%, #f0f4f8 100%);
 }
 
 .auth-box {
@@ -6892,7 +6892,7 @@ a {
   margin: 0 auto 16px;
   display: block;
   border-radius: 20px;
-  box-shadow: 0 8px 28px rgba(185, 149, 106, 0.3);
+  box-shadow: 0 8px 28px rgba(0, 120, 212, 0.25);
   object-fit: contain;
 }
 
@@ -6900,16 +6900,13 @@ a {
   margin-bottom: 6px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
   font-size: 36px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #8b6914, #5c4a1e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1b1a19;
 }
 
 .auth-tagline {
-  color: #a09080;
+  color: var(--muted);
   margin-bottom: 0;
   font-size: 13px;
   letter-spacing: 2px;
@@ -6935,11 +6932,15 @@ a {
   color: var(--accent);
   font-weight: 500;
   padding: 0 4px;
+  border: none;
+  background: none;
+  border-radius: 0;
 }
 
 .auth-switch .btn.text:hover {
   color: var(--accent-hover);
   text-decoration: underline;
+  background: none;
 }
 
 /* ── 引导页 ── */
@@ -6994,7 +6995,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #f5f0eb 0%, #e8e0d5 35%, #f0ebe3 60%, #f5f2ed 100%);
+  background: linear-gradient(160deg, #eef4fa 0%, #dce8f5 35%, #e8eff7 60%, #f0f4f8 100%);
   animation: splashFadeIn 0.5s ease;
 }
 
@@ -7009,14 +7010,14 @@ a {
   margin: 0 auto 24px;
   display: block;
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(185, 149, 106, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 120, 212, 0.25);
   animation: splashLogo 1s ease;
   object-fit: contain;
 }
 
 .splash-welcome {
   font-size: 14px;
-  color: #a09080;
+  color: var(--muted);
   margin-bottom: 6px;
   letter-spacing: 4px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
@@ -7025,13 +7026,13 @@ a {
 .splash-name {
   font-size: 24px;
   font-weight: 600;
-  color: #3d3226;
+  color: var(--ink);
   margin-bottom: 8px;
 }
 
 .splash-bazi {
   font-size: 14px;
-  color: #8b7355;
+  color: var(--accent-text);
   margin-bottom: 24px;
   letter-spacing: 1px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
@@ -7049,7 +7050,7 @@ a {
 .splash-bar-fill {
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, #c9a96e, #d4b87a);
+  background: linear-gradient(90deg, var(--brand-60), var(--brand-40));
   border-radius: 2px;
   animation: splashBar 4.5s 0.3s ease forwards;
 }
@@ -7061,7 +7062,7 @@ a {
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 20px;
   background: rgba(255,255,255,0.5);
-  color: #a09080;
+  color: var(--muted);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
@@ -7070,7 +7071,7 @@ a {
 
 .splash-skip:hover {
   background: rgba(255,255,255,0.8);
-  color: #6b5a4a;
+  color: var(--ink);
   border-color: rgba(0,0,0,0.18);
 }
 
