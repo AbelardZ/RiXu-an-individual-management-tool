@@ -17,12 +17,12 @@
   --neutral-100: #1b1a19;
 
   /* ── 品牌色 ── */
-  --brand-10: #eff6fc;
-  --brand-20: #c7e0f4;
-  --brand-40: #479ef5;
-  --brand-60: #0078d4;
-  --brand-70: #106ebe;
-  --brand-80: #004578;
+  --brand-10: #e8edf5;
+  --brand-20: #b8c8e8;
+  --brand-40: #4a6db5;
+  --brand-60: #001c76;
+  --brand-70: #00155e;
+  --brand-80: #000e3d;
 
   /* ── 语义色 ── */
   --green-10: #dff6dd;
@@ -6863,10 +6863,10 @@ a {
   place-items: center;
   padding: 28px;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(0, 120, 212, 0.08), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(0, 103, 192, 0.05), transparent 60%),
-    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(71, 158, 245, 0.04), transparent 60%),
-    linear-gradient(180deg, #e8eef5 0%, #eef3f8 45%, #f0f4f8 100%);
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(0, 28, 118, 0.06), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(0, 28, 118, 0.04), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(74, 109, 181, 0.03), transparent 60%),
+    linear-gradient(180deg, #e8ecf2 0%, #eef1f6 45%, #f0f3f7 100%);
 }
 
 .auth-box {
@@ -6892,7 +6892,7 @@ a {
   margin: 0 auto 16px;
   display: block;
   border-radius: 20px;
-  box-shadow: 0 8px 28px rgba(0, 120, 212, 0.25);
+  box-shadow: 0 8px 28px rgba(0, 28, 118, 0.2);
   object-fit: contain;
 }
 
@@ -6995,7 +6995,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #eef4fa 0%, #dce8f5 35%, #e8eff7 60%, #f0f4f8 100%);
+  background: linear-gradient(160deg, #e8ecf2 0%, #dce3ee 35%, #e6eaf2 60%, #eef1f6 100%);
   animation: splashFadeIn 0.5s ease;
 }
 
@@ -7010,7 +7010,7 @@ a {
   margin: 0 auto 24px;
   display: block;
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 120, 212, 0.25);
+  box-shadow: 0 12px 40px rgba(0, 28, 118, 0.2);
   animation: splashLogo 1s ease;
   object-fit: contain;
 }
