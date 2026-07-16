@@ -43,7 +43,7 @@ def _calendar_meta(day: date) -> tuple[str, str, list[str]]:
     lunar_month = lunar.getMonth()
     
     # 节气优先显示
-    jie_qi = lunar.getJieQi() or solar.getJieQi() or ""
+    jie_qi = lunar.getJieQi() or ""
     if jie_qi:
         lunar_label = jie_qi
     elif lunar_day == 1:
