@@ -3530,7 +3530,7 @@ a {
   align-items: center;
   padding: 14px 18px 14px 14px;
   border: 1px solid rgba(0, 120, 212, 0.1);
-  border-radius: var(--radius);
+  border-radius: 12px;
   cursor: pointer;
   transition: all 160ms ease;
   position: relative;
@@ -4436,15 +4436,13 @@ a {
 .obsidian-shell {
   min-height: calc(100vh - 76px);
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 0;
   overflow: hidden;
-  background: rgba(255,255,255,0.46);
-  border: 1px solid rgba(255,255,255,0.62);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 2px;
-  box-shadow: var(--shadow-8);
-  backdrop-filter: blur(24px) saturate(1.08);
-  -webkit-backdrop-filter: blur(24px) saturate(1.08);
+  box-shadow: var(--shadow-2);
 }
 
 .obsidian-shell .vault-sidebar {
@@ -4452,8 +4450,8 @@ a {
   border-right: 1px solid var(--line);
   border-radius: 2px 0 0 2px;
   box-shadow: none;
-  background: #e2e5ea;
-  padding: 14px;
+  background: var(--neutral-4);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -4490,8 +4488,8 @@ a {
   width: 100%;
   min-height: 32px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #f1f3f6;
+  border-radius: 6px;
+  background: var(--neutral-0);
   padding: 0 10px 0 28px;
   font-size: 12px;
 }
@@ -4621,9 +4619,9 @@ a {
   gap: 4px;
   padding: 3px 5px 3px 0;
   border: 1px solid transparent;
-  border-radius: 12px;
-  background: #edf0f4;
-  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 120ms ease, border-color 120ms ease;
   position: relative;
 }
 
@@ -4639,15 +4637,15 @@ a {
 }
 
 .vault-file-row:hover {
-  border-color: #d8dde5;
-  background: #f8fafc;
+  border-color: var(--line);
+  background: var(--surface-hover);
 }
 
 .vault-file-row.active {
-  border-color: color-mix(in srgb, var(--accent) 26%, #cfd6df);
-  background: #f9fafb;
-  color: var(--accent-text);
-  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.08), inset 0 0 0 1px rgba(0, 120, 212, 0.12);
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
 }
 
 .vault-file-row.active::before {
@@ -4685,8 +4683,8 @@ a {
   place-items: center;
   flex: 0 0 auto;
   border-radius: 4px;
-  background: #d8dde5;
-  color: #5e6673;
+  background: var(--neutral-12);
+  color: var(--muted);
   font-size: 9px;
   font-weight: 800;
   text-transform: uppercase;
@@ -4740,7 +4738,7 @@ a {
 .markdown-workspace {
   min-width: 0;
   padding: 0;
-  background: #dfe4ea;
+  background: var(--neutral-0);
   border-radius: 0 2px 2px 0;
   overflow: hidden;
 }
