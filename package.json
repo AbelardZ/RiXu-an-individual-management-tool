@@ -47,8 +47,8 @@
         "to": "frontend"
       },
       {
-        "from": "assets/dayorder.ico",
-        "to": "assets/dayorder.ico"
+        "from": "assets",
+        "to": "assets"
       }
     ],
     "win": {

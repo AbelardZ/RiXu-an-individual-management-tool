@@ -151,6 +151,7 @@ function backendEnvironment(workspacePath) {
     ...process.env,
     WORKSPACE_DIR: workspacePath,
     DAYORDER_FRONTEND_DIR: path.join(projectRoot, "frontend"),
+    DAYORDER_ASSETS_DIR: path.join(projectRoot, "assets"),
     PYTHONUTF8: "1",
     PYTHONIOENCODING: "utf-8",
   };
