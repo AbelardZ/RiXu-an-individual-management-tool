@@ -80,7 +80,6 @@ function trendChart(trend, period) {
     </div>
   `;
 }
-}
 
 function dayDashboard(detail) {
   return `
