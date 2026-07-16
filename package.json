@@ -7,7 +7,7 @@
   "author": "DayOrder",
   "scripts": {
     "desktop:dev": "electron .",
-    "build:backend": "cd core/backend && ..\..\.venv\\Scripts\\python.exe -m PyInstaller --clean --noconfirm --onefile --name dayorder-backend dayorder_backend.py --hidden-import app.models",
+    "build:backend": "cd core\\backend && ..\\..\\.venv\\Scripts\\python.exe -m PyInstaller --clean --noconfirm --onefile --name dayorder-backend dayorder_backend.py --hidden-import app.models",
     "dist:win": "npm run build:backend && electron-builder --win nsis",
     "dist:win:mirror": "set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/&& npm run dist:win"
   },
