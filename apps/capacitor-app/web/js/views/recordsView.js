@@ -171,6 +171,10 @@ function refreshRecordTypeModal() {
     <aside>${recordTypeList()}</aside>
     <section>${recordTypeForm(editingType)}</section>
   `;
+  // 重新绑定表单事件
+  body.querySelectorAll("form[data-submit]").forEach((form) => {
+    form.addEventListener("submit", handleSubmit);
+  });
 }
 
 function emptyRecordField() {
