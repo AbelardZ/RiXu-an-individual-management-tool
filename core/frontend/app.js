@@ -874,11 +874,10 @@ function showSplashThenRender() {
         <div class="splash-user">
           <div class="splash-name">${escapeHtml(nickname)}</div>
           ${signature ? `<div class="splash-signature">${escapeHtml(signature)}</div>` : ""}
-          ${baziPhrase ? `<div class="splash-bazi">${escapeHtml(baziPhrase)}</div>` : ""}
         </div>
         <div class="splash-bar"><div class="splash-bar-fill"></div></div>
-        <button class="splash-skip" data-action="skipSplash">跳过</button>
       </div>
+      <button class="splash-skip" data-action="skipSplash">跳过</button>
     </div>
   `;
   // 5 秒后自动进入，点击跳过立即进入

@@ -7073,15 +7073,8 @@ a {
 }
 
 .splash-signature {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 6px;
-  font-style: italic;
-}
-
-.splash-bazi {
   font-size: 14px;
-  color: var(--accent-text);
+  color: var(--muted);
   letter-spacing: 1px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
 }
