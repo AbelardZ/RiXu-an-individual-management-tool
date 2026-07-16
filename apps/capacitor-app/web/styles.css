@@ -3415,6 +3415,7 @@ a {
 }
 
 .record-type-tile {
+  position: relative;
   aspect-ratio: 1;
   min-height: 132px;
   display: grid;
