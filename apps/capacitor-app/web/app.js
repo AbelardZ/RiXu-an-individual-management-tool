@@ -2365,6 +2365,21 @@ async function saveTag(data) {
   state.edit.tag = null;
 }
 
+async function saveRecordType(form, data) {
+  const payload = cleanPayload({
+    name: data.name,
+    color: data.color,
+    icon: data.icon,
+    enabled: data.enabled === "on" || data.enabled === true,
+  });
+  if (data.id) {
+    await request(`/record-types/${data.id}`, { method: "PATCH", body: JSON.stringify(payload) });
+  } else {
+    await request("/record-types", { method: "POST", body: JSON.stringify(payload) });
+  }
+  state.edit.recordType = null;
+}
+
 async function saveProfile(data) {
   state.profile = await request("/users/me/profile", { method: "PATCH", body: JSON.stringify(cleanPayload(data)) });
   state.user = await request("/auth/me");
