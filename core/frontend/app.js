@@ -920,13 +920,14 @@ function render() {
           ${menu.map(([id, label, icon]) => `<button class="${state.view === id ? "active" : ""}" data-route="${id}">${iconSvg(icon)}<span>${label}</span></button>`).join("")}
         </nav>
         <div class="side-footer">
-          <div class="side-date-picker">
-            ${datePickerHtml("sideDatePicker", state.selectedDate)}
+          <div class="side-bottom-row">
+            <div class="side-date-picker">
+              ${datePickerHtml("sideDatePicker", state.selectedDate)}
+            </div>
+            <button class="side-sync-btn" id="syncIndicator" data-action="manualSync" title="${escapeHtml(state.syncMessage || '点击同步')}">
+              <span class="sync-dot ${state.syncStatus}"></span>
+            </button>
           </div>
-          <button class="side-sync-btn" id="syncIndicator" data-action="manualSync" title="${escapeHtml(state.syncMessage || '点击同步')}">
-            <span class="sync-dot ${state.syncStatus}"></span>
-            <span class="sync-label">${syncStatusLabel()}</span>
-          </button>
           <button class="btn danger" data-action="logout">退出登录</button>
         </div>
       </aside>

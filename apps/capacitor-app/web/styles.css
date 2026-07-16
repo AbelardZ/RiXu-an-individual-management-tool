@@ -708,41 +708,47 @@ a {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* ── 底部行：日期 + 同步并排 ── */
+.side-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .side-date-picker {
-  padding: 0 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .side-date-picker .dt-picker-trigger {
-  min-height: 36px;
+  min-height: 32px;
   border-radius: var(--radius);
   background: rgba(255,255,255,0.5);
   border: 1px solid rgba(0,0,0,0.08);
-  font-size: 13px;
-  padding: 0 10px;
+  font-size: 12px;
+  padding: 0 8px;
 }
 
-/* ── 同步按钮（状态+操作二合一） ── */
+/* ── 同步按钮（小巧图标） ── */
 
 .side-sync-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(255,255,255,0.5);
-  font-size: 12px;
-  color: var(--muted);
   cursor: pointer;
   transition: all 0.2s;
-  font-family: var(--font-sans);
+  flex-shrink: 0;
 }
 
 .side-sync-btn:hover {
   background: rgba(255,255,255,0.8);
   border-color: var(--line-strong);
-  color: var(--ink);
 }
 
 .side-sync-btn:active {
