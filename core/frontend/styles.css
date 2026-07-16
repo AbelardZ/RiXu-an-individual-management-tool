@@ -414,36 +414,37 @@ a {
   cursor: default;
 }
 
-/* ── 查看模式信息网格 ── */
+/* ── 查看模式信息列表（单列） ── */
 
-.profile-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.profile-info-item {
+.profile-info-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
-  background: rgba(0,0,0,0.02);
-  border-radius: 12px;
-  border: 1px solid var(--line);
+  gap: 0;
+}
+
+.profile-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--neutral-9);
+}
+.profile-info-row:last-child {
+  border-bottom: none;
 }
 
 .profile-info-label {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .profile-info-value {
   font-size: 14px;
   font-weight: 500;
   color: var(--ink);
+  text-align: right;
 }
 
 /* ── 账户页数据管理 ── */

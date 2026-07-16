@@ -1121,34 +1121,70 @@ function profileViewCard(profile = {}) {
   const birthDisplay = profile?.birth_date
     ? `${profile.birth_date} ${profile.birth_time || ''}`
     : "未设置";
+  const zodiacSign = profile?.birth_date ? getZodiacSign(profile.birth_date) : "—";
+  const email = state.user?.email || "—";
   return `
-    <div class="profile-info-grid">
-      <div class="profile-info-item">
+    <div class="profile-info-list">
+      <div class="profile-info-row">
+        <span class="profile-info-label">邮箱</span>
+        <span class="profile-info-value">${escapeHtml(email)}</span>
+      </div>
+      <div class="profile-info-row">
         <span class="profile-info-label">昵称</span>
         <span class="profile-info-value">${escapeHtml(profile?.nickname || "—")}</span>
       </div>
-      <div class="profile-info-item">
+      <div class="profile-info-row">
         <span class="profile-info-label">签名</span>
         <span class="profile-info-value">${escapeHtml(profile?.signature || "—")}</span>
       </div>
-      <div class="profile-info-item">
+      <div class="profile-info-row">
         <span class="profile-info-label">性别</span>
         <span class="profile-info-value">${genderLabel[profile?.gender] || "未指定"}</span>
       </div>
-      <div class="profile-info-item">
+      <div class="profile-info-row">
         <span class="profile-info-label">出生</span>
         <span class="profile-info-value">${escapeHtml(birthDisplay)}</span>
       </div>
-      <div class="profile-info-item">
-        <span class="profile-info-label">时区</span>
-        <span class="profile-info-value">${escapeHtml(profile?.birth_timezone || "—")}</span>
+      <div class="profile-info-row">
+        <span class="profile-info-label">星座</span>
+        <span class="profile-info-value">${zodiacSign}</span>
       </div>
-      <div class="profile-info-item">
+      <div class="profile-info-row">
         <span class="profile-info-label">出生地</span>
         <span class="profile-info-value">${escapeHtml(profile?.birth_place || "—")}</span>
       </div>
     </div>
   `;
+}
+
+/* ── 星座计算 ── */
+
+function getZodiacSign(dateStr) {
+  if (!dateStr) return "—";
+  const d = new Date(dateStr + "T00:00:00");
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const signs = [
+    { name: "摩羯座", end: [1, 19] },
+    { name: "水瓶座", end: [2, 18] },
+    { name: "双鱼座", end: [3, 20] },
+    { name: "白羊座", end: [4, 19] },
+    { name: "金牛座", end: [5, 20] },
+    { name: "双子座", end: [6, 21] },
+    { name: "巨蟹座", end: [7, 22] },
+    { name: "狮子座", end: [8, 22] },
+    { name: "处女座", end: [9, 22] },
+    { name: "天秤座", end: [10, 23] },
+    { name: "天蝎座", end: [11, 21] },
+    { name: "射手座", end: [12, 21] },
+    { name: "摩羯座", end: [12, 31] },
+  ];
+  for (const sign of signs) {
+    if (month < sign.end[0] || (month === sign.end[0] && day <= sign.end[1])) {
+      return sign.name;
+    }
+  }
+  return "—";
 }
 
 /* ── 编辑模式：表单 ── */
@@ -1167,7 +1203,6 @@ function profileEditForm(profile = {}) {
       </select>`)}
       ${field("出生日期", datePickerHtml("birth_date", profile?.birth_date || "", { required: true }))}
       ${field("出生时间", timePickerHtml("birth_time", profile?.birth_time || "", { required: true }))}
-      ${field("时区", `<input name="birth_timezone" value="${escapeHtml(profile?.birth_timezone || "Asia/Shanghai")}" placeholder="例如 Asia/Shanghai" />`)}
       ${field("出生地", `<input name="birth_place" value="${escapeHtml(profile?.birth_place || "")}" placeholder="例如 扬州市" />`)}
       <div class="form-actions" style="margin-top: 10px; display: flex; gap: 8px;">
         <button class="btn primary" type="submit">保存资料</button>

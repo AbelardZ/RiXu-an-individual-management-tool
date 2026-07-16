@@ -106,13 +106,7 @@ function dailyTemplateList() {
 }
 
 function dailyTaskEditor(item) {
-  return taskDrawer(`
-    <div class="reminder-editor-head">
-      <span>${item ? "编辑每日任务" : "新增每日任务"}</span>
-      <button class="icon-btn" type="button" data-action="closeTaskEditor">×</button>
-    </div>
-    ${dailyTemplateForm(item)}
-  `);
+  return taskDrawer(dailyTemplateForm(item), item ? "编辑每日任务" : "新增每日任务");
 }
 
 /* ── 时段工具 ── */
