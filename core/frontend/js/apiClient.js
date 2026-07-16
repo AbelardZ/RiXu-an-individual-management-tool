@@ -17,9 +17,9 @@ const API = (() => {
     const base = CapacitorPlatform.getApiBase();
     if (base) return base.replace(/\/$/, "") + "/api";
   }
-  // Electron 桌面端：preload 注入了 __DAYORDER_ELECTRON__ 标记
+  // Electron 桌面端：走本地后端（本地后端通过 CLOUD_API_URL 自动转发到云端）
   if (window.__DAYORDER_ELECTRON__) {
-    return "http://39.104.75.202/api";
+    return "/api";
   }
   return "/api";
 })();

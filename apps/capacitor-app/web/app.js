@@ -910,12 +910,13 @@ function showSplashThenRender() {
 
 function resolveAssetUrl(url) {
   if (!url) return "";
-  if (typeof CapacitorPlatform !== 'undefined') {
-    return CapacitorPlatform.resolveUrl(url);
-  }
-  // Electron 桌面端：补全云端 URL
+  // Electron 桌面端：补全云端 URL（必须在 CapacitorPlatform 之前判断，
+  // 因为 Electron 下 CapacitorPlatform 也存在但 getApiBase() 返回空字符串）
   if ((url.startsWith('/api/') || url.startsWith('/uploads/')) && window.__DAYORDER_ELECTRON__) {
     return "http://39.104.75.202" + url;
+  }
+  if (typeof CapacitorPlatform !== 'undefined') {
+    return CapacitorPlatform.resolveUrl(url);
   }
   return url;
 }
