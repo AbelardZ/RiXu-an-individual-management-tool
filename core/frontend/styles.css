@@ -294,8 +294,8 @@ a {
 }
 
 .card-head-modern h3 {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1704,19 +1704,19 @@ a {
 
 .title-block h2 {
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "SimSun", serif;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1.15;
-  color: #2c2416;
+  color: var(--ink);
 }
 
 .title-block p {
   margin-top: 6px;
-  color: #9b8c7c;
+  color: var(--muted);
   font-size: 13px;
   font-weight: 400;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
 .toolbar {
