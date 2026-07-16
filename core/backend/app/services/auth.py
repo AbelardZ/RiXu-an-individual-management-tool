@@ -156,11 +156,10 @@ def register_with_invitation(
     invitation.used_count += 1
     # ── 邀请码校验结束 ──
 
-    # 构建 profile（注册时身份信息可选）
+    # 构建 profile
     nickname = payload.nickname or email.split("@")[0]
     birth_date = payload.birth_date
     birth_time = payload.birth_time or "12:00"
-    birth_timezone = payload.birth_timezone or "Asia/Shanghai"
 
     bazi_status = "pending"
     bazi_result_json = None
@@ -171,7 +170,7 @@ def register_with_invitation(
                 gender=payload.gender or "unspecified",
                 birth_date=birth_date,
                 birth_time=birth_time,
-                birth_timezone=birth_timezone,
+                birth_timezone="Asia/Shanghai",
                 birth_place=payload.birth_place,
             )
             bazi_status, bazi_result_json = calculate_bazi_json(profile_input)
@@ -188,8 +187,10 @@ def register_with_invitation(
         gender=payload.gender or "unspecified",
         birth_date=birth_date,
         birth_time=birth_time,
-        birth_timezone=birth_timezone,
+        birth_timezone="Asia/Shanghai",
         birth_place=payload.birth_place,
+        current_city=payload.current_city,
+        signature=payload.signature,
         bazi_status=bazi_status,
         bazi_result_json=bazi_result_json,
     )

@@ -23,25 +23,26 @@ class ProfileUpdate(BaseModel):
     gender: GenderValue | None = None
     birth_date: date | None = None
     birth_time: str | None = Field(default=None, pattern=r"^\d{2}:\d{2}$")
-    birth_timezone: str | None = Field(default=None, max_length=64)
     birth_place: str | None = Field(default=None, max_length=160)
+    current_city: str | None = Field(default=None, max_length=160)
     avatar_url: str | None = Field(default=None, max_length=512)
     signature: str | None = Field(default=None, max_length=200)
     weather_cities: list[str] | None = None
 
 
 class RegisterWithInviteRequest(BaseModel):
-    """注册请求：只需邮箱+密码+邀请码，身份信息可选（引导页填写）"""
+    """注册请求：邮箱+密码+邀请码+身份信息"""
     invitation_code: str = Field(min_length=1, max_length=128)
     email: str = Field(min_length=3, max_length=320)
     password: str = Field(min_length=8, max_length=128)
-    # 身份信息（可选，引导页会更新）
-    nickname: str = Field(default="新用户", max_length=80)
+    # 身份信息
+    nickname: str = Field(min_length=1, max_length=80)
     gender: GenderValue = "unspecified"
-    birth_date: date | None = None
-    birth_time: str | None = Field(default=None, pattern=r"^\d{2}:\d{2}$")
-    birth_timezone: str = Field(default="Asia/Shanghai", max_length=64)
+    birth_date: date
+    birth_time: str = Field(pattern=r"^\d{2}:\d{2}$")
     birth_place: str | None = Field(default=None, max_length=160)
+    current_city: str | None = Field(default=None, max_length=160)
+    signature: str | None = Field(default=None, max_length=200)
     # 工作区
     storage_name: str | None = Field(default=None, max_length=120)
     storage_path: str | None = Field(default=None, max_length=1024)
@@ -81,8 +82,8 @@ class UserProfileResponse(BaseModel):
     gender: str
     birth_date: date
     birth_time: str
-    birth_timezone: str
     birth_place: str | None
+    current_city: str | None = None
     avatar_url: str | None = None
     signature: str | None = None
     bazi_status: str

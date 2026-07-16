@@ -71,6 +71,7 @@ class UserProfile(Base):
     birth_time: Mapped[str] = mapped_column(String(5), nullable=False)
     birth_timezone: Mapped[str] = mapped_column(String(64), default="Asia/Shanghai", nullable=False)
     birth_place: Mapped[str | None] = mapped_column(String(160))
+    current_city: Mapped[str | None] = mapped_column(String(160))
     avatar_url: Mapped[str | None] = mapped_column(String(512))
     signature: Mapped[str | None] = mapped_column(String(200))
     bazi_status: Mapped[str] = mapped_column(String(32), default="pending", nullable=False)

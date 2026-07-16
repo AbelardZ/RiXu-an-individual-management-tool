@@ -46,7 +46,7 @@ def update_profile(db: Session, user: User, payload: ProfileUpdate) -> UserProfi
             user.profile.weather_cities_json = json.dumps(value, ensure_ascii=False) if value is not None else None
             continue
         setattr(user.profile, field, value)
-        if field in {"birth_date", "birth_time", "birth_timezone", "birth_place"}:
+        if field in {"birth_date", "birth_time", "birth_place"}:
             changed_birth_fields = True
 
     if changed_birth_fields:

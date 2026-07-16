@@ -657,6 +657,13 @@ function registerForm() {
       ${field("邮箱", `<input name="email" autocomplete="email" required />`)}
       ${field("密码", `<input name="password" type="password" minlength="8" required />`)}
       ${field("邀请码", `<input name="invitation_code" placeholder="请输入邀请码" required />`)}
+      ${field("昵称", `<input name="nickname" required placeholder="给自己取个名字" />`)}
+      ${field("个性签名", `<input name="signature" placeholder="一句话介绍自己" maxlength="200" />`)}
+      ${field("性别", `<select name="gender">${option("unspecified", "未指定")} ${option("male", "男")} ${option("female", "女")} ${option("other", "其他")}</select>`)}
+      ${field("出生日期", datePickerHtml("birth_date", "", { required: true }))}
+      ${field("出生时间", timePickerHtml("birth_time", "", { required: true }))}
+      ${field("出生地", `<input name="birth_place" placeholder="例如 江苏省扬州市" />`)}
+      ${field("当前住地", `<input name="current_city" placeholder="例如 上海市" />`)}
       <button class="btn primary full" type="submit">注册</button>
     </form>
     <p class="auth-switch">已有账号？<button class="btn text" data-auth-tab="login">返回登录</button></p>
@@ -705,22 +712,26 @@ function bindAuth() {
     event.preventDefault();
     const data = cleanPayload(Object.fromEntries(new FormData(event.target)));
     try {
-      // 注册只需邮箱+密码+邀请码，身份信息在引导页填写
       const payload = {
         email: data.email,
         password: data.password,
         invitation_code: data.invitation_code,
-        nickname: data.email.split("@")[0],  // 临时昵称
-        gender: "unspecified",
-        birth_date: "2000-01-01",  // 占位，引导页会更新
-        birth_time: "12:00",
-        birth_timezone: "Asia/Shanghai",
+        nickname: data.nickname || data.email.split("@")[0],
+        gender: data.gender || "unspecified",
+        birth_date: data.birth_date,
+        birth_time: data.birth_time || "12:00",
+        birth_place: data.birth_place || null,
+        current_city: data.current_city || null,
+        signature: data.signature || null,
       };
       const result = await request("/auth/register", { method: "POST", body: JSON.stringify(payload) });
       state.token = result.access_token;
       localStorage.setItem("dayorder.token", result.access_token);
       state.user = result.user;
-      renderOnboarding();
+      // 注册成功直接进入，跳过引导页
+      await loadBase();
+      await loadView();
+      showSplashThenRender();
     } catch (error) {
       setToast(error.message);
     }
