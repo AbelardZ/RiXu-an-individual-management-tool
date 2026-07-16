@@ -504,10 +504,14 @@ function selectPickerPanelHtml(pickerEl) {
 /* ═══════════════════════════════════════════════════════════════════════ */
 
 async function bootstrap() {
-  if (!state.token) {
-    renderAuth();
+  // 独立悬浮窗模式：只渲染计时器
+  if (window.location.search.includes('float=pomodoro')) {
+    document.getElementById("app").innerHTML = '<div id="pomodoro-float-root"></div>';
+    renderPomodoroFloatRoot();
     return;
   }
+
+  if (!state.token) {
   try {
     state.user = await request("/auth/me");
     // 已登录用户刷新时也显示过渡动画
@@ -904,6 +908,32 @@ function showSplashThenRender() {
     clearTimeout(timer);
     finish();
   });
+}
+
+/* ── 独立悬浮窗渲染 ── */
+
+function renderPomodoroFloatRoot() {
+  const root = document.getElementById("pomodoro-float-root");
+  if (!root) return;
+  initPomodoroState();
+  // 从主窗口同步状态（通过 localStorage 桥接）
+  const saved = localStorage.getItem("dayorder.pomodoro.state");
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.active) {
+        Object.assign(state.pomodoro, data);
+        startPomodoroTick();
+      }
+    } catch (e) { /* ignore */ }
+  }
+  root.innerHTML = pomodoroFloatHtml();
+  // 每秒刷新
+  setInterval(() => {
+    if (state.pomodoro && state.pomodoro.active) {
+      root.innerHTML = pomodoroFloatHtml();
+    }
+  }, 1000);
 }
 
 function render() {

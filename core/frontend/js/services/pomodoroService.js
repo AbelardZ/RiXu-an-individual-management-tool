@@ -65,8 +65,26 @@ async function startPomodoro(taskType, taskId, taskTitle) {
 
     startPomodoroTick();
     render();
+    // Electron: 弹出独立悬浮窗
+    openPomodoroFloatWindow();
   } catch (error) {
     setToast("启动番茄钟失败: " + error.message);
+  }
+}
+
+async function openPomodoroFloatWindow() {
+  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.openPomodoroFloat) {
+    try {
+      await dayOrderDesktop.openPomodoroFloat({});
+    } catch (e) { /* 非 Electron 环境忽略 */ }
+  }
+}
+
+async function closePomodoroFloatWindow() {
+  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.closePomodoroFloat) {
+    try {
+      await dayOrderDesktop.closePomodoroFloat();
+    } catch (e) { /* ignore */ }
   }
 }
 
@@ -86,9 +104,27 @@ function startPomodoroTick() {
       state.pomodoro.remainingSeconds = state.pomodoro.elapsedSeconds;
     }
 
+    // 同步状态到 localStorage（供独立悬浮窗读取）
+    syncPomodoroStateToStorage();
     // 只更新番茄钟浮窗 DOM，不全量渲染
     updatePomodoroFloatDOM();
   }, 1000);
+}
+
+function syncPomodoroStateToStorage() {
+  try {
+    localStorage.setItem("dayorder.pomodoro.state", JSON.stringify({
+      active: state.pomodoro.active,
+      status: state.pomodoro.status,
+      remainingSeconds: state.pomodoro.remainingSeconds,
+      elapsedSeconds: state.pomodoro.elapsedSeconds,
+      plannedMinutes: state.pomodoro.plannedMinutes,
+      timerMode: state.pomodoro.timerMode,
+      taskTitle: state.pomodoro.taskTitle,
+      isFullscreen: state.pomodoro.isFullscreen,
+      bgImage: state.pomodoro.bgImage,
+    }));
+  } catch (e) { /* ignore */ }
 }
 
 function updatePomodoroFloatDOM() {
@@ -136,6 +172,7 @@ async function stopPomodoro() {
 
   state.pomodoro.active = false;
   state.pomodoro.status = "idle";
+  closePomodoroFloatWindow();
 
   if (sessionId) {
     try {
@@ -159,6 +196,7 @@ async function completePomodoro() {
 
   state.pomodoro.active = false;
   state.pomodoro.status = "idle";
+  closePomodoroFloatWindow();
 
   if (sessionId) {
     try {
