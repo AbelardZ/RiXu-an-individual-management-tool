@@ -56,9 +56,10 @@ function pomodoroMiniHtml(timeStr, progress, isRunning, taskLabel, session) {
 }
 
 function pomodoroFullscreenHtml(timeStr, progress, isRunning, taskLabel, session, bgImage) {
-  const bgStyle = bgImage ? `style="background-image:url(${escapeHtml(bgImage)});background-size:cover;background-position:center"` : "";
+  const bgStyle = bgImage ? `style="background-image:url(${escapeHtml(bgImage)})"` : "";
+  const bgClass = bgImage ? " has-bg" : "";
   return `
-    <div class="pomodoro-fullscreen" id="pomodoroFullscreen" ${bgStyle}>
+    <div class="pomodoro-fullscreen${bgClass}" id="pomodoroFullscreen" ${bgStyle}>
       <div class="pomodoro-fullscreen-overlay"></div>
       <div class="pomodoro-fullscreen-content">
         <div class="pomodoro-fullscreen-top">

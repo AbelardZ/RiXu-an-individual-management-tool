@@ -981,11 +981,21 @@ a {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: #1a1a2e;
+  /* 默认毛玻璃渐变背景 */
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(26,74,160,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(100,140,200,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(60,100,180,0.12) 0%, transparent 50%),
+    linear-gradient(160deg, #f0f4fa 0%, #e8edf5 30%, #dfe6f0 60%, #eef2f8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pomodoroFsIn 0.3s ease;
+  animation: pomodoroFsIn 0.4s ease;
+}
+/* 有自定义背景时覆盖 */
+.pomodoro-fullscreen.has-bg {
+  background-size: cover;
+  background-position: center;
 }
 @keyframes pomodoroFsIn {
   from { opacity: 0; }
@@ -995,7 +1005,16 @@ a {
 .pomodoro-fullscreen-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  /* 毛玻璃叠加层 */
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  background: rgba(255,255,255,0.25);
+}
+/* 有自定义背景时加深遮罩 */
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-overlay {
+  backdrop-filter: blur(12px) brightness(0.6);
+  -webkit-backdrop-filter: blur(12px) brightness(0.6);
+  background: rgba(0,0,0,0.35);
 }
 
 .pomodoro-fullscreen-content {
@@ -1021,6 +1040,9 @@ a {
 .pomodoro-fullscreen-task {
   font-size: 18px;
   font-weight: 600;
+  color: var(--ink);
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-task {
   color: #fff;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
@@ -1036,18 +1058,28 @@ a {
   height: 36px;
   border: none;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  color: #fff;
+  background: rgba(0,0,0,0.06);
+  color: var(--ink);
   font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background 0.2s;
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-bg-btn,
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-exit {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
 }
 .pomodoro-fullscreen-bg-btn:hover,
 .pomodoro-fullscreen-exit:hover {
+  background: rgba(0,0,0,0.12);
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-bg-btn:hover,
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-exit:hover {
   background: rgba(255,255,255,0.3);
 }
 
@@ -1069,12 +1101,18 @@ a {
 }
 
 .pomodoro-fullscreen-ring .pomodoro-ring-bg {
+  stroke: rgba(0,0,0,0.08);
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-ring .pomodoro-ring-bg {
   stroke: rgba(255,255,255,0.15);
 }
 
 .pomodoro-fullscreen-ring .pomodoro-ring-fg {
-  stroke: #fff;
+  stroke: var(--brand-60);
   stroke-width: 6;
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-ring .pomodoro-ring-fg {
+  stroke: #fff;
 }
 
 .pomodoro-fullscreen-time {
@@ -1086,12 +1124,18 @@ a {
   font-size: 48px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-time {
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .pomodoro-fullscreen-mode {
   font-size: 14px;
+  color: var(--muted);
+}
+.pomodoro-fullscreen.has-bg .pomodoro-fullscreen-mode {
   color: rgba(255,255,255,0.7);
 }
 
