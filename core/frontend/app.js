@@ -939,6 +939,21 @@ function renderPomodoroFloatRoot() {
   }, 1000);
 }
 
+/* ── URL 解析 ── */
+
+function resolveAssetUrl(url) {
+  if (!url) return "";
+  // Capacitor 移动端
+  if (typeof CapacitorPlatform !== 'undefined') {
+    return CapacitorPlatform.resolveUrl(url);
+  }
+  // Electron 桌面端：补全相对路径为云端绝对路径
+  if (typeof dayOrderDesktop !== 'undefined' && url.startsWith('/')) {
+    return "http://39.104.75.202" + url;
+  }
+  return url;
+}
+
 function render() {
   // splash 进行中时不覆盖
   if (state._splashActive) return;
@@ -947,7 +962,8 @@ function render() {
     return;
   }
   const profile = state.profile || state.user?.profile || {};
-  const avatarUrl = (typeof CapacitorPlatform !== 'undefined' ? CapacitorPlatform.resolveUrl(profile.avatar_url) : profile.avatar_url) || "";
+  const rawAvatar = profile.avatar_url || "";
+  const avatarUrl = resolveAssetUrl(rawAvatar);
   const nickname = profile.nickname || state.user?.email || "";
   const signature = profile.signature || "";
 
@@ -1108,7 +1124,7 @@ function accountView() {
             <div class="profile-cover"></div>
             <div class="profile-avatar-wrapper">
               <div class="user-avatar extra-large ${isEditing ? '' : 'no-upload'}" data-action="${isEditing ? 'uploadAvatar' : ''}" title="${isEditing ? '点击上传头像' : ''}">
-                ${profile?.avatar_url ? `<img src="${escapeHtml(typeof CapacitorPlatform !== 'undefined' ? CapacitorPlatform.resolveUrl(profile.avatar_url) : profile.avatar_url)}" alt="头像" />` : `<span class="avatar-placeholder">${(profile?.nickname || "日")[0]}</span>`}
+                ${profile?.avatar_url ? `<img src="${escapeHtml(resolveAssetUrl(profile.avatar_url))}" alt="头像" />` : `<span class="avatar-placeholder">${(profile?.nickname || "日")[0]}</span>`}
                 ${isEditing ? `
                 <span class="avatar-upload-overlay">
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
