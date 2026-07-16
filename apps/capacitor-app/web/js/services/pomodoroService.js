@@ -29,10 +29,9 @@ function initPomodoroState() {
   }
   // 恢复背景图
   if (!state.pomodoro.bgImage) {
-    try {
-      const saved = localStorage.getItem("pomodoroBgImage");
-      if (saved) state.pomodoro.bgImage = saved;
-    } catch (e) { /* 忽略 */ }
+    loadPomodoroBg().then(saved => {
+      if (saved && state.pomodoro) state.pomodoro.bgImage = saved;
+    });
   }
 }
 
@@ -312,19 +311,46 @@ function uploadPomodoroBg() {
       const file = input.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         if (!state.pomodoro) return;
-        state.pomodoro.bgImage = reader.result;
-        // 保存到 localStorage 以便复用
-        try {
-          localStorage.setItem("pomodoroBgImage", reader.result);
-        } catch (e) { /* 忽略存储失败 */ }
+        const dataUrl = reader.result;
+        state.pomodoro.bgImage = dataUrl;
+        // 持久化存储
+        await savePomodoroBg(dataUrl);
         render();
       };
       reader.readAsDataURL(file);
     });
   }
   input.click();
+}
+
+async function savePomodoroBg(dataUrl) {
+  // Electron: 存到文件系统
+  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.savePomodoroBg) {
+    try {
+      await dayOrderDesktop.savePomodoroBg(dataUrl);
+      return;
+    } catch (e) { /* fallback */ }
+  }
+  // 浏览器: localStorage
+  try {
+    localStorage.setItem("pomodoroBgImage", dataUrl);
+  } catch (e) { /* 忽略 */ }
+}
+
+async function loadPomodoroBg() {
+  // Electron: 从文件系统读取
+  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.loadPomodoroBg) {
+    try {
+      const saved = await dayOrderDesktop.loadPomodoroBg();
+      if (saved) return saved;
+    } catch (e) { /* fallback */ }
+  }
+  // 浏览器: localStorage
+  try {
+    return localStorage.getItem("pomodoroBgImage");
+  } catch (e) { return null; }
 }
 
 /* ── 悬浮窗拖拽 ── */
@@ -403,14 +429,12 @@ function initPomodoroDrag() {
   });
 }
 
-// 页面加载时初始化拖拽
+// 页面加载时初始化拖拽和恢复背景图
 document.addEventListener("DOMContentLoaded", () => {
   initPomodoroDrag();
-  // 恢复背景图
-  try {
-    const saved = localStorage.getItem("pomodoroBgImage");
+  loadPomodoroBg().then(saved => {
     if (saved && state.pomodoro) {
       state.pomodoro.bgImage = saved;
     }
-  } catch (e) { /* 忽略 */ }
+  });
 });
