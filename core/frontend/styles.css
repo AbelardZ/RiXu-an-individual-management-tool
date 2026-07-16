@@ -3570,17 +3570,21 @@ a {
 }
 
 .record-check-item .event-actions {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
   opacity: 0;
   pointer-events: none;
-  transform: translateX(4px);
   transition: opacity 120ms ease, transform 120ms ease;
+  z-index: 2;
 }
 
 .record-check-item:hover .event-actions,
 .record-check-item:focus-within .event-actions {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0);
+  transform: translateY(-50%) translateX(0);
 }
 
 .record-event-list {
