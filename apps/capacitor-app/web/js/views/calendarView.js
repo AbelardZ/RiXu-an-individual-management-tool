@@ -27,16 +27,22 @@ function todayStatsSection() {
   const totalCompleted = dailyCompleted + rangeCompleted;
   const totalTasks = dailyTotal + rangeTotal;
 
-  const periodLabels = { day: "今日", week: "本周", month: "本月" };
+  const offsetDate = state.timeStatsOffset || state.selectedDate;
+  const periodLabel = formatStatsPeriodLabel(period, offsetDate);
 
   return `
     <div class="today-stats-section">
       <div class="today-stats-header">
         <h3>数据看板</h3>
-        <div class="today-stats-tabs">
-          <button class="${period === 'day' ? 'active' : ''}" data-action="switchTimeStats" data-period="day">日</button>
-          <button class="${period === 'week' ? 'active' : ''}" data-action="switchTimeStats" data-period="week">周</button>
-          <button class="${period === 'month' ? 'active' : ''}" data-action="switchTimeStats" data-period="month">月</button>
+        <div class="today-stats-nav">
+          <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="-1">‹</button>
+          <span class="today-stats-period">${periodLabel}</span>
+          <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="1">›</button>
+          <div class="today-stats-tabs">
+            <button class="${period === 'day' ? 'active' : ''}" data-action="switchTimeStats" data-period="day">日</button>
+            <button class="${period === 'week' ? 'active' : ''}" data-action="switchTimeStats" data-period="week">周</button>
+            <button class="${period === 'month' ? 'active' : ''}" data-action="switchTimeStats" data-period="month">月</button>
+          </div>
         </div>
       </div>
       <div class="today-stats-card">
@@ -53,6 +59,25 @@ function todayStatsSection() {
       ${stats.trend ? trendChart(stats.trend, period) : ""}
     </div>
   `;
+}
+
+function formatStatsPeriodLabel(period, dateStr) {
+  if (!dateStr) return "";
+  const d = new Date(dateStr + "T00:00:00");
+  if (period === "day") {
+    return `${d.getMonth() + 1}月${d.getDate()}日`;
+  }
+  if (period === "week") {
+    const start = new Date(d);
+    start.setDate(d.getDate() - d.getDay() + 1);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    return `${start.getMonth() + 1}/${start.getDate()}-${end.getMonth() + 1}/${end.getDate()}`;
+  }
+  if (period === "month") {
+    return `${d.getFullYear()}年${d.getMonth() + 1}月`;
+  }
+  return "";
 }
 
 function trendChart(trend, period) {

@@ -2041,11 +2041,8 @@ async function handleAction(target) {
     await loadTimeStats(target.dataset.period, state.selectedDate);
     render();
   }
-  if (action === "prevTimeStats") {
-    shiftTimeStats(-1);
-  }
-  if (action === "nextTimeStats") {
-    shiftTimeStats(1);
+  if (action === "shiftTimeStats") {
+    shiftTimeStats(parseInt(target.dataset.direction));
   }
   if (action === "toggleStatsCollapse") {
     toggleStatsCollapse(target.dataset.key);

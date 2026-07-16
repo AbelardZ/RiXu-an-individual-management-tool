@@ -577,3 +577,5 @@ class TimeStatsResponse(BaseModel):
     range_completed: int = 0
     range_total: int = 0
     category_completions: list[TaskCompletionStats] = Field(default_factory=list)
+    # 折线图趋势数据
+    trend: list[dict] = Field(default_factory=list)

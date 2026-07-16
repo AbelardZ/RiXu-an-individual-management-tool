@@ -1642,9 +1642,40 @@ a {
 
 .today-stats-header h3 {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ink);
-  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+}
+
+.today-stats-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.today-stats-arrow {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.today-stats-arrow:hover {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.today-stats-period {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 80px;
+  text-align: center;
 }
 
 .today-stats-tabs {

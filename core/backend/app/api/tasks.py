@@ -370,6 +370,9 @@ def get_time_stats(
         if template:
             stats.task_title = template.title
 
+    # 折线图趋势数据
+    trend = _build_trend(db, current_user.id, period, start, end)
+
     return TimeStatsResponse(
         period=period,
         start_date=start,
@@ -383,4 +386,86 @@ def get_time_stats(
         range_completed=range_completed,
         range_total=range_total,
         category_completions=category_completions,
+        trend=trend,
     )
+
+
+def _build_trend(db: Session, user_id: int, period: str, start: date, end: date) -> list[dict]:
+    """构建折线图趋势数据"""
+    from datetime import timedelta
+    trend = []
+    if period == "day":
+        # 日视图：过去7天
+        for i in range(6, -1, -1):
+            d = end - timedelta(days=i)
+            sessions = db.scalars(
+                select(TaskTimerSession).where(
+                    TaskTimerSession.user_id == user_id,
+                    TaskTimerSession.status == "completed",
+                    func.date(TaskTimerSession.started_at) == d,
+                )
+            ).all()
+            minutes = sum(s.actual_seconds for s in sessions) // 60
+            statuses = db.scalars(
+                select(DailyTaskStatus).where(
+                    DailyTaskStatus.user_id == user_id,
+                    DailyTaskStatus.task_date == d,
+                    DailyTaskStatus.deleted_at.is_(None),
+                )
+            ).all()
+            completed = sum(1 for s in statuses if s.completed)
+            trend.append({"label": f"{d.month}/{d.day}", "minutes": minutes, "completed": completed})
+    elif period == "week":
+        # 周视图：过去4周
+        for i in range(3, -1, -1):
+            ws = end - timedelta(weeks=i, days=end.weekday())
+            we = ws + timedelta(days=6)
+            sessions = db.scalars(
+                select(TaskTimerSession).where(
+                    TaskTimerSession.user_id == user_id,
+                    TaskTimerSession.status == "completed",
+                    func.date(TaskTimerSession.started_at) >= ws,
+                    func.date(TaskTimerSession.started_at) <= we,
+                )
+            ).all()
+            minutes = sum(s.actual_seconds for s in sessions) // 60
+            statuses = db.scalars(
+                select(DailyTaskStatus).where(
+                    DailyTaskStatus.user_id == user_id,
+                    DailyTaskStatus.task_date >= ws,
+                    DailyTaskStatus.task_date <= we,
+                    DailyTaskStatus.deleted_at.is_(None),
+                )
+            ).all()
+            completed = sum(1 for s in statuses if s.completed)
+            trend.append({"label": f"{ws.month}/{ws.day}", "minutes": minutes, "completed": completed})
+    elif period == "month":
+        # 月视图：过去6个月
+        for i in range(5, -1, -1):
+            ms = (end.month - i - 1) % 12 + 1
+            my = end.year - (1 if end.month - i <= 0 else 0)
+            ms_date = date(my, ms, 1)
+            if ms == 12:
+                me_date = date(my + 1, 1, 1) - timedelta(days=1)
+            else:
+                me_date = date(my, ms + 1, 1) - timedelta(days=1)
+            sessions = db.scalars(
+                select(TaskTimerSession).where(
+                    TaskTimerSession.user_id == user_id,
+                    TaskTimerSession.status == "completed",
+                    func.date(TaskTimerSession.started_at) >= ms_date,
+                    func.date(TaskTimerSession.started_at) <= me_date,
+                )
+            ).all()
+            minutes = sum(s.actual_seconds for s in sessions) // 60
+            statuses = db.scalars(
+                select(DailyTaskStatus).where(
+                    DailyTaskStatus.user_id == user_id,
+                    DailyTaskStatus.task_date >= ms_date,
+                    DailyTaskStatus.task_date <= me_date,
+                    DailyTaskStatus.deleted_at.is_(None),
+                )
+            ).all()
+            completed = sum(1 for s in statuses if s.completed)
+            trend.append({"label": f"{my}/{ms}", "minutes": minutes, "completed": completed})
+    return trend
