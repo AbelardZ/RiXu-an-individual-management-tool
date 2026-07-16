@@ -7078,7 +7078,7 @@ a {
 .splash-skip {
   position: fixed;
   top: 24px;
-  left: 24px;
+  right: 24px;
   padding: 6px 16px;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 20px;
