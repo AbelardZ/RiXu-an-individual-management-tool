@@ -1,0 +1,12 @@
+{
+  "app": "DayOrder",
+  "workspace_version": 1,
+  "database": "dayorder.db",
+  "uploads": {
+    "avatars": "uploads/avatars",
+    "records": "uploads/records",
+    "journals": "uploads/journals",
+    "milestones": "uploads/milestones"
+  },
+  "created_at": "2026-07-16T01:07:53"
+}

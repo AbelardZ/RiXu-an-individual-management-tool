@@ -622,11 +622,10 @@ function renderAuth(mode = "login") {
   app.innerHTML = `
     <main class="auth">
       <section class="auth-box">
-        <h1>日序</h1>
-        <p>按日期整理记录、札记、提醒和日历状态。</p>
-        <div class="tabs">
-          <button class="${mode === "login" ? "active" : ""}" data-auth-tab="login">登录</button>
-          <button class="${mode === "register" ? "active" : ""}" data-auth-tab="register">注册新账号</button>
+        <div class="auth-brand">
+          <div class="auth-logo">日</div>
+          <h1>日序</h1>
+          <p class="auth-tagline">以日为序，知命而行</p>
         </div>
         ${mode === "login" ? loginForm(savedEmail, savedPassword) : registerForm()}
       </section>
@@ -648,6 +647,7 @@ function loginForm(savedEmail = "", savedPassword = "") {
       </label>
       <button class="btn primary full" type="submit">登录</button>
     </form>
+    <p class="auth-switch">还没有账号？<button class="btn text" data-auth-tab="register">注册新账号</button></p>
   `;
 }
 
@@ -659,6 +659,7 @@ function registerForm() {
       ${field("邀请码", `<input name="invitation_code" placeholder="请输入邀请码" required />`)}
       <button class="btn primary full" type="submit">注册</button>
     </form>
+    <p class="auth-switch">已有账号？<button class="btn text" data-auth-tab="login">返回登录</button></p>
   `;
 }
 
@@ -848,20 +849,38 @@ async function enterApp(result) {
 
 function showSplashThenRender() {
   const nickname = state.user?.profile?.nickname || state.user?.email?.split("@")[0] || "日序";
+  const bazi = state.user?.profile?.bazi_result_json;
+  let baziPhrase = "";
+  if (bazi) {
+    try {
+      const b = typeof bazi === "string" ? JSON.parse(bazi) : bazi;
+      const dayStem = b.day_stem || b.pillars?.day?.stem || "";
+      const dayBranch = b.day_branch || b.pillars?.day?.branch || "";
+      const dayWuXing = b.day_wu_xing || b.five_elements?.[2] || "";
+      baziPhrase = `${dayStem}${dayBranch} · ${dayWuXing}`;
+    } catch { baziPhrase = ""; }
+  }
   app.innerHTML = `
     <div class="splash-screen">
       <div class="splash-content">
         <div class="splash-logo">日</div>
-        <div class="splash-welcome">欢迎回来</div>
+        <div class="splash-welcome">日序</div>
         <div class="splash-name">${escapeHtml(nickname)}</div>
+        ${baziPhrase ? `<div class="splash-bazi">${escapeHtml(baziPhrase)}</div>` : ""}
         <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+        <button class="splash-skip" data-action="skipSplash">跳过</button>
       </div>
     </div>
   `;
-  // 动画结束后渲染主界面
-  setTimeout(() => {
+  // 5 秒后自动进入，点击跳过立即进入
+  let splashDone = false;
+  const finish = () => {
+    if (splashDone) return;
+    splashDone = true;
     render();
-  }, 1200);
+  };
+  setTimeout(finish, 5000);
+  app.querySelector(".splash-skip")?.addEventListener("click", finish);
 }
 
 function render() {

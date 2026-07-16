@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.dayorder.app',
   appName: '日序',
-  webDir: 'web',
+  webDir: 'www',
   server: {
     // 开发时允许从本地文件加载（生产环境会使用 WebView 加载）
     androidScheme: 'https',

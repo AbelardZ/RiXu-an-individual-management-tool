@@ -2213,6 +2213,7 @@ a {
   gap: 14px;
   padding: 18px;
   box-shadow: none;
+  text-align: left;
 }
 
 .form-grid.compact {
@@ -6869,57 +6870,82 @@ a {
 }
 
 .auth-box {
-  width: min(480px, 100%);
-  padding: 32px;
+  width: min(420px, 100%);
+  padding: 40px 32px 32px;
   border-radius: var(--radius-xl);
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(44px) saturate(1.25);
   -webkit-backdrop-filter: blur(44px) saturate(1.25);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow-8);
+  text-align: center;
+}
+
+/* ── 品牌区 ── */
+.auth-brand {
+  margin-bottom: 28px;
+}
+
+.auth-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 28px rgba(185, 149, 106, 0.3);
 }
 
 .auth-box h1 {
-  margin-bottom: 8px;
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--brand-60), var(--purple-60));
+  margin-bottom: 6px;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #8b6914, #5c4a1e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.auth-box p {
+.auth-tagline {
+  color: #a09080;
+  margin-bottom: 0;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+}
+
+.auth-box > p {
   color: var(--muted);
   margin-bottom: 22px;
   font-size: 14px;
   line-height: 1.6;
 }
 
-.tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  margin-bottom: 20px;
-  background: var(--neutral-12);
-  padding: 4px;
-  border-radius: var(--radius);
+/* ── 切换链接（下脚小字） ── */
+.auth-switch {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--muted);
 }
 
-.tabs button {
-  border-radius: 6px;
-  padding: 10px;
-  background: transparent;
-  font-size: 14px;
+.auth-switch .btn.text {
+  font-size: 13px;
+  color: var(--accent);
   font-weight: 500;
-  transition: all 120ms ease;
+  padding: 0 4px;
 }
 
-.tabs button.active {
-  background: var(--surface);
-  box-shadow: var(--shadow-2);
-  font-weight: 600;
+.auth-switch .btn.text:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
 }
 
 /* ── 引导页 ── */
@@ -6974,50 +7000,60 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d5 40%, #f0ebe3 100%);
-  animation: splashFadeIn 0.4s ease;
+  background: linear-gradient(160deg, #f5f0eb 0%, #e8e0d5 35%, #f0ebe3 60%, #f5f2ed 100%);
+  animation: splashFadeIn 0.5s ease;
 }
 
 .splash-content {
   text-align: center;
-  animation: splashUp 0.6s ease;
+  animation: splashUp 0.8s ease;
 }
 
 .splash-logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+  font-size: 44px;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(185, 149, 106, 0.35);
-  animation: splashLogo 0.8s ease;
+  box-shadow: 0 12px 40px rgba(185, 149, 106, 0.35);
+  animation: splashLogo 1s ease;
 }
 
 .splash-welcome {
-  font-size: 15px;
+  font-size: 14px;
   color: #a09080;
-  margin-bottom: 4px;
-  letter-spacing: 2px;
+  margin-bottom: 6px;
+  letter-spacing: 4px;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
 }
 
 .splash-name {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: #3d3226;
-  margin-bottom: 28px;
+  margin-bottom: 8px;
+}
+
+.splash-bazi {
+  font-size: 14px;
+  color: #8b7355;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
 }
 
 .splash-bar {
-  width: 120px;
+  width: 140px;
   height: 3px;
-  margin: 0 auto;
-  background: rgba(0,0,0,0.08);
+  margin: 0 auto 20px;
+  background: rgba(0,0,0,0.06);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -7027,7 +7063,27 @@ a {
   width: 0;
   background: linear-gradient(90deg, #c9a96e, #d4b87a);
   border-radius: 2px;
-  animation: splashBar 1s 0.3s ease forwards;
+  animation: splashBar 4.5s 0.3s ease forwards;
+}
+
+.splash-skip {
+  display: block;
+  margin: 0 auto;
+  padding: 6px 20px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.5);
+  color: #a09080;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+
+.splash-skip:hover {
+  background: rgba(255,255,255,0.8);
+  color: #6b5a4a;
+  border-color: rgba(0,0,0,0.18);
 }
 
 @keyframes splashFadeIn {

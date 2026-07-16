@@ -14,7 +14,9 @@ const CapacitorPlatform = (() => {
 
   const getApiBase = () => {
     if (isElectron()) return '';
-    if (location.port === '8000') return '';
+    // 本地 FastAPI 开发服务器：同源
+    if ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port === '8000') return '';
+    // 其他所有情况：使用远程服务器
     return BUILTIN_REMOTE;
   };
 

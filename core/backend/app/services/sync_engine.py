@@ -79,6 +79,8 @@ SYNC_TABLES = {
     "range_reminders": "id",
     "milestone_days": "id",
     "attachments": "id",
+    "user_profiles": "user_id",
+    "user_storages": "id",
 }
 
 
