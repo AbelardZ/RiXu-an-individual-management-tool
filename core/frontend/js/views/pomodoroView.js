@@ -31,7 +31,9 @@ function pomodoroMiniHtml(timeStr, progress, isRunning, taskLabel, session) {
       <div class="pomodoro-float-handle" data-drag-handle="pomodoroFloat">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg>
         <span class="pomodoro-float-task">${escapeHtml(taskLabel)}</span>
-        <button class="pomodoro-float-fullscreen" data-action="togglePomodoroFullscreen" title="全屏">⛶</button>
+        <button class="pomodoro-float-fullscreen" data-action="togglePomodoroFullscreen" title="全屏">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+        </button>
       </div>
       <div class="pomodoro-float-body">
         <div class="pomodoro-ring">
@@ -65,8 +67,12 @@ function pomodoroFullscreenHtml(timeStr, progress, isRunning, taskLabel, session
         <div class="pomodoro-fullscreen-top">
           <span class="pomodoro-fullscreen-task">${escapeHtml(taskLabel)}</span>
           <div class="pomodoro-fullscreen-top-actions">
-            <button class="pomodoro-fullscreen-bg-btn" data-action="uploadPomodoroBg" title="更换背景">🖼</button>
-            <button class="pomodoro-fullscreen-exit" data-action="togglePomodoroFullscreen" title="退出全屏">✕</button>
+            <button class="pomodoro-fullscreen-bg-btn" data-action="uploadPomodoroBg" title="更换背景">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </button>
+            <button class="pomodoro-fullscreen-exit" data-action="togglePomodoroFullscreen" title="退出全屏">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
           </div>
         </div>
         <div class="pomodoro-fullscreen-center">
