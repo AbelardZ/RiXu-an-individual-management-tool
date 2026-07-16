@@ -317,5 +317,5 @@ async function manualSync() {
   state.syncMessage = "手动同步中…";
   updateSyncIndicator();
   await performSync();
-  showToast(state.syncStatus === "synced" ? "同步完成" : state.syncMessage);
+  setToast(state.syncStatus === "synced" ? "同步完成" : state.syncMessage);
 }
