@@ -34,12 +34,14 @@ function todayStatsSection() {
     <div class="today-stats-section">
       <div class="today-stats-header">
         <h3>数据看板</h3>
+      </div>
+      <div class="today-stats-controls">
         <div class="today-stats-date-nav">
           <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="-1">‹</button>
           <span class="today-stats-period">${periodLabel}</span>
           <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="1">›</button>
         </div>
-        <div class="today-stats-tabs">
+        <div class="today-stats-tabs today-stats-tabs-right">
           <button class="${period === 'day' ? 'active' : ''}" data-action="switchTimeStats" data-period="day">日</button>
           <button class="${period === 'week' ? 'active' : ''}" data-action="switchTimeStats" data-period="week">周</button>
           <button class="${period === 'month' ? 'active' : ''}" data-action="switchTimeStats" data-period="month">月</button>
@@ -57,6 +59,8 @@ function todayStatsSection() {
         </div>
       </div>
       ${stats.trend ? trendChart(stats.trend, period) : ""}
+      ${statsDetailBreakdown(stats)}
+      ${statsBarChart(stats)}
     </div>
   `;
 }
@@ -84,10 +88,11 @@ function trendChart(trend, period) {
   if (!trend || !trend.length) return "";
   const maxVal = Math.max(...trend.map(d => d.minutes || 0), 1);
   const maxTasks = Math.max(...trend.map(d => d.completed || 0), 1);
-  const w = trend.length * 44;
-  const h = 80;
-  const pointsMinutes = trend.map((d, i) => `${i * 44 + 22},${h - (d.minutes || 0) / maxVal * h}`).join(" ");
-  const pointsTasks = trend.map((d, i) => `${i * 44 + 22},${h - (d.completed || 0) / maxTasks * h}`).join(" ");
+  const barW = 56;
+  const w = trend.length * barW;
+  const h = 100;
+  const pointsMinutes = trend.map((d, i) => `${i * barW + barW / 2},${h - (d.minutes || 0) / maxVal * (h - 16)}`).join(" ");
+  const pointsTasks = trend.map((d, i) => `${i * barW + barW / 2},${h - (d.completed || 0) / maxTasks * (h - 16)}`).join(" ");
 
   return `
     <div class="trend-chart">
@@ -102,6 +107,110 @@ function trendChart(trend, period) {
       <div class="trend-labels">
         ${trend.map(d => `<span>${d.label || ''}</span>`).join("")}
       </div>
+    </div>
+  `;
+}
+
+/* ── 任务用时明细（左右栏：每日任务 / 近期任务，含折叠子任务） ── */
+
+function statsDetailBreakdown(stats) {
+  const dailyTasks = stats.daily_tasks || [];
+  const rangeReminders = stats.range_reminders || [];
+  if (!dailyTasks.length && !rangeReminders.length) return "";
+
+  return `
+    <div class="stats-detail">
+      ${statsDetailCol("每日任务用时", dailyTasks, "daily_task")}
+      ${statsDetailCol("近期任务用时", rangeReminders, "range_reminder")}
+    </div>
+  `;
+}
+
+function statsDetailCol(title, tasks, taskType) {
+  if (!tasks.length) {
+    return `
+      <div class="stats-detail-col">
+        <div class="stats-detail-col-head">${title}</div>
+        <div class="stats-detail-list">
+          <div class="stats-detail-item" style="color:var(--muted);justify-content:center;">暂无数据</div>
+        </div>
+      </div>
+    `;
+  }
+
+  const maxSec = Math.max(...tasks.map(t => t.total_seconds || 0), 1);
+  const sorted = [...tasks].sort((a, b) => (b.total_seconds || 0) - (a.total_seconds || 0));
+
+  return `
+    <div class="stats-detail-col">
+      <div class="stats-detail-col-head">${title}</div>
+      <div class="stats-detail-list">
+        ${sorted.map(t => {
+          const mins = Math.floor((t.total_seconds || 0) / 60);
+          const pct = Math.round((t.total_seconds || 0) / maxSec * 100);
+          const hasSub = t.sub_tasks && t.sub_tasks.length > 0;
+          return `
+            <div class="stats-detail-item" data-task-id="${t.task_id}" data-task-type="${taskType}">
+              <span class="stats-detail-item-name">${escapeHtml(t.task_title || '未命名')}</span>
+              <span class="stats-detail-item-time">${mins}分钟</span>
+              <div class="stats-detail-item-bar">
+                <div class="stats-detail-item-bar-fill" style="width:${pct}%"></div>
+              </div>
+            </div>
+            ${hasSub ? t.sub_tasks.map(sub => {
+              const subMins = Math.floor((sub.total_seconds || 0) / 60);
+              return `
+                <div class="stats-detail-item stats-detail-sub">
+                  <span class="stats-detail-item-name">${escapeHtml(sub.task_title || '未命名')}</span>
+                  <span class="stats-detail-item-time">${subMins}分钟</span>
+                </div>
+              `;
+            }).join("") : ""}
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+/* ── 分类柱状图 ── */
+
+function statsBarChart(stats) {
+  const categories = stats.range_categories || [];
+  const completions = stats.category_completions || [];
+  if (!categories.length && !completions.length) return "";
+
+  // 合并分类数据：用时 + 完成数
+  const catMap = {};
+  for (const c of categories) {
+    const cid = c.category_id || c.task_id;
+    if (!catMap[cid]) catMap[cid] = { title: c.category_title || c.task_title || '未分类', minutes: 0, completed: 0, total: 0 };
+    catMap[cid].minutes += Math.floor((c.total_seconds || 0) / 60);
+  }
+  for (const c of completions) {
+    const cid = c.category_id || c.task_id;
+    if (!catMap[cid]) catMap[cid] = { title: c.category_title || c.task_title || '未分类', minutes: 0, completed: 0, total: 0 };
+    catMap[cid].completed = c.completed_count || 0;
+    catMap[cid].total = c.total_count || 0;
+  }
+
+  const items = Object.values(catMap);
+  if (!items.length) return "";
+
+  const maxMin = Math.max(...items.map(i => i.minutes), 1);
+
+  return `
+    <div class="stats-bar-section">
+      <div class="stats-bar-title">分类统计</div>
+      ${items.map(item => `
+        <div class="stats-bar-row">
+          <span class="stats-bar-label">${escapeHtml(item.title)}</span>
+          <div class="stats-bar-track">
+            <div class="stats-bar-fill" style="width:${Math.round(item.minutes / maxMin * 100)}%">${item.minutes > 0 ? item.minutes + 'm' : ''}</div>
+          </div>
+          <span class="stats-bar-val">${item.completed}/${item.total} 完成</span>
+        </div>
+      `).join("")}
     </div>
   `;
 }
