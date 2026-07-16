@@ -2,7 +2,7 @@
    pomodoroView.js — 番茄钟悬浮窗 & 任务日志视图
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── 番茄钟悬浮窗 ── */
+/* ── 番茄钟悬浮窗（可拖动 / 小窗+全屏） ── */
 
 function pomodoroFloatHtml() {
   if (!state.pomodoro || !state.pomodoro.active) return "";
@@ -15,10 +15,25 @@ function pomodoroFloatHtml() {
     : 0;
   const isRunning = session.status === "running";
   const taskLabel = session.taskTitle || "专注";
+  const isFullscreen = state.pomodoro.isFullscreen || false;
+  const bgImage = state.pomodoro.bgImage || "";
 
+  if (isFullscreen) {
+    return pomodoroFullscreenHtml(timeStr, progress, isRunning, taskLabel, session, bgImage);
+  }
+  return pomodoroMiniHtml(timeStr, progress, isRunning, taskLabel, session);
+}
+
+function pomodoroMiniHtml(timeStr, progress, isRunning, taskLabel, session) {
   return `
-    <div class="pomodoro-float ${isRunning ? "is-running" : "is-paused"}">
-      <div class="pomodoro-float-inner">
+    <div class="pomodoro-float ${isRunning ? "is-running" : "is-paused"}" id="pomodoroFloat"
+         data-draggable="pomodoroFloat">
+      <div class="pomodoro-float-handle" data-drag-handle="pomodoroFloat">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg>
+        <span class="pomodoro-float-task">${escapeHtml(taskLabel)}</span>
+        <button class="pomodoro-float-fullscreen" data-action="togglePomodoroFullscreen" title="全屏">⛶</button>
+      </div>
+      <div class="pomodoro-float-body">
         <div class="pomodoro-ring">
           <svg viewBox="0 0 120 120">
             <circle cx="60" cy="60" r="54" class="pomodoro-ring-bg" />
@@ -28,13 +43,48 @@ function pomodoroFloatHtml() {
           </svg>
           <div class="pomodoro-time">${timeStr}</div>
         </div>
-        <div class="pomodoro-task-name">${escapeHtml(taskLabel)}</div>
         <div class="pomodoro-mode">${session.timerMode === "countdown" ? "倒计时" : "正计时"} · ${session.plannedMinutes}分钟</div>
         <div class="pomodoro-actions">
           ${isRunning
             ? `<button class="pomodoro-btn pause" data-action="pausePomodoro">暂停</button>`
             : `<button class="pomodoro-btn start" data-action="resumePomodoro">继续</button>`}
           <button class="pomodoro-btn stop" data-action="stopPomodoro">结束</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function pomodoroFullscreenHtml(timeStr, progress, isRunning, taskLabel, session, bgImage) {
+  const bgStyle = bgImage ? `style="background-image:url(${escapeHtml(bgImage)});background-size:cover;background-position:center"` : "";
+  return `
+    <div class="pomodoro-fullscreen" id="pomodoroFullscreen" ${bgStyle}>
+      <div class="pomodoro-fullscreen-overlay"></div>
+      <div class="pomodoro-fullscreen-content">
+        <div class="pomodoro-fullscreen-top">
+          <span class="pomodoro-fullscreen-task">${escapeHtml(taskLabel)}</span>
+          <div class="pomodoro-fullscreen-top-actions">
+            <button class="pomodoro-fullscreen-bg-btn" data-action="uploadPomodoroBg" title="更换背景">🖼</button>
+            <button class="pomodoro-fullscreen-exit" data-action="togglePomodoroFullscreen" title="退出全屏">✕</button>
+          </div>
+        </div>
+        <div class="pomodoro-fullscreen-center">
+          <div class="pomodoro-fullscreen-ring">
+            <svg viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" class="pomodoro-ring-bg" />
+              <circle cx="100" cy="100" r="90" class="pomodoro-ring-fg"
+                stroke-dasharray="${2 * Math.PI * 90}"
+                stroke-dashoffset="${2 * Math.PI * 90 * (1 - progress / 100)}" />
+            </svg>
+            <div class="pomodoro-fullscreen-time">${timeStr}</div>
+          </div>
+          <div class="pomodoro-fullscreen-mode">${session.timerMode === "countdown" ? "倒计时" : "正计时"} · ${session.plannedMinutes}分钟</div>
+        </div>
+        <div class="pomodoro-fullscreen-actions">
+          ${isRunning
+            ? `<button class="pomodoro-fullscreen-btn pause" data-action="pausePomodoro">暂停</button>`
+            : `<button class="pomodoro-fullscreen-btn start" data-action="resumePomodoro">继续</button>`}
+          <button class="pomodoro-fullscreen-btn stop" data-action="stopPomodoro">结束</button>
         </div>
       </div>
     </div>

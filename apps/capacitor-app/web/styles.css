@@ -828,7 +828,7 @@ a {
   color: var(--accent);
 }
 
-/* ── 番茄钟悬浮窗 ── */
+/* ── 番茄钟悬浮窗（可拖动小窗） ── */
 
 .pomodoro-float {
   position: fixed;
@@ -836,11 +836,19 @@ a {
   right: 24px;
   z-index: 100;
   background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-  padding: 20px;
-  width: 220px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+  width: 200px;
+  user-select: none;
   animation: pomodoroIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: grab;
+  transition: box-shadow 0.2s;
+}
+.pomodoro-float.dragging {
+  cursor: grabbing;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.1);
+  opacity: 0.95;
+  transition: none;
 }
 
 @keyframes pomodoroIn {
@@ -849,24 +857,65 @@ a {
 }
 
 .pomodoro-float.is-running {
-  border: 2px solid #e74c3c;
+  border: 2px solid var(--brand-60);
 }
-
 .pomodoro-float.is-paused {
   border: 2px solid #f39c12;
 }
 
-.pomodoro-float-inner {
+/* 拖拽手柄 */
+.pomodoro-float-handle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--neutral-9);
+  cursor: grab;
+}
+.pomodoro-float-handle:active {
+  cursor: grabbing;
+}
+.pomodoro-float-task {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pomodoro-float-fullscreen {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pomodoro-float-fullscreen:hover {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.pomodoro-float-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  padding: 12px 16px 16px;
 }
 
 .pomodoro-ring {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
 }
 
 .pomodoro-ring svg {
@@ -876,15 +925,15 @@ a {
 .pomodoro-ring-bg {
   fill: none;
   stroke: #eee;
-  stroke-width: 6;
+  stroke-width: 5;
 }
 
 .pomodoro-ring-fg {
   fill: none;
-  stroke: #e74c3c;
-  stroke-width: 6;
+  stroke: var(--brand-60);
+  stroke-width: 5;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.5s ease;
+  transition: stroke-dashoffset 0.3s ease;
 }
 
 .pomodoro-time {
@@ -893,21 +942,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: #24201b;
-}
-
-.pomodoro-task-name {
-  font-size: 13px;
-  font-weight: 600;
   color: var(--ink);
-  text-align: center;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .pomodoro-mode {
@@ -923,10 +961,10 @@ a {
 
 .pomodoro-btn {
   flex: 1;
-  padding: 8px 0;
+  padding: 7px 0;
   border: none;
-  border-radius: 10px;
-  font-size: 13px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -936,6 +974,154 @@ a {
 .pomodoro-btn.start { background: #27ae60; color: #fff; }
 .pomodoro-btn.stop { background: #e74c3c; color: #fff; }
 .pomodoro-btn:hover { filter: brightness(1.1); }
+
+/* ── 番茄钟全屏模式 ── */
+
+.pomodoro-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #1a1a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pomodoroFsIn 0.3s ease;
+}
+@keyframes pomodoroFsIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pomodoro-fullscreen-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+}
+
+.pomodoro-fullscreen-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.pomodoro-fullscreen-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pomodoro-fullscreen-task {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.pomodoro-fullscreen-top-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pomodoro-fullscreen-bg-btn,
+.pomodoro-fullscreen-exit {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+.pomodoro-fullscreen-bg-btn:hover,
+.pomodoro-fullscreen-exit:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.pomodoro-fullscreen-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pomodoro-fullscreen-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.pomodoro-fullscreen-ring svg {
+  transform: rotate(-90deg);
+}
+
+.pomodoro-fullscreen-ring .pomodoro-ring-bg {
+  stroke: rgba(255,255,255,0.15);
+}
+
+.pomodoro-fullscreen-ring .pomodoro-ring-fg {
+  stroke: #fff;
+  stroke-width: 6;
+}
+
+.pomodoro-fullscreen-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.pomodoro-fullscreen-mode {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+.pomodoro-fullscreen-actions {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.pomodoro-fullscreen-btn {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(8px);
+}
+.pomodoro-fullscreen-btn.pause { background: rgba(243,156,18,0.85); color: #fff; }
+.pomodoro-fullscreen-btn.start { background: rgba(39,174,96,0.85); color: #fff; }
+.pomodoro-fullscreen-btn.stop { background: rgba(231,76,60,0.85); color: #fff; }
+.pomodoro-fullscreen-btn:hover { filter: brightness(1.15); }
+
+/* 隐藏背景上传的 file input */
+.pomodoro-bg-input {
+  display: none;
+}
 
 /* ── 番茄钟启动弹窗 ── */
 

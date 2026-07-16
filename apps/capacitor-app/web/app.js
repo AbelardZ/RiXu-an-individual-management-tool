@@ -2047,6 +2047,12 @@ async function handleAction(target) {
   if (action === "toggleStatsFold") {
     toggleStatsFold(target.dataset.fold);
   }
+  if (action === "togglePomodoroFullscreen") {
+    togglePomodoroFullscreen();
+  }
+  if (action === "uploadPomodoroBg") {
+    uploadPomodoroBg();
+  }
   if (action === "toggleStatsCollapse") {
     toggleStatsCollapse(target.dataset.key);
   }

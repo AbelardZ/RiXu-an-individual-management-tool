@@ -23,7 +23,16 @@ function initPomodoroState() {
       workLogs: [],
       logTab: "timer",
       showStartModal: false,
+      isFullscreen: false,
+      bgImage: "",
     };
+  }
+  // 恢复背景图
+  if (!state.pomodoro.bgImage) {
+    try {
+      const saved = localStorage.getItem("pomodoroBgImage");
+      if (saved) state.pomodoro.bgImage = saved;
+    } catch (e) { /* 忽略 */ }
   }
 }
 
@@ -84,17 +93,29 @@ function startPomodoroTick() {
 }
 
 function updatePomodoroFloatDOM() {
-  const float = document.getElementById("pomodoroFloat");
-  if (!float) return;
   const minutes = Math.floor(state.pomodoro.remainingSeconds / 60);
   const seconds = state.pomodoro.remainingSeconds % 60;
-  const timeEl = float.querySelector(".pomodoro-time");
-  if (timeEl) timeEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
+  const timeStr = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   const planned = state.pomodoro.plannedMinutes;
   const progress = planned > 0 ? ((planned * 60 - state.pomodoro.remainingSeconds) / (planned * 60)) * 100 : 0;
-  const ring = float.querySelector(".pomodoro-ring-fg");
-  if (ring) ring.setAttribute("stroke-dashoffset", 2 * Math.PI * 54 * (1 - progress / 100));
+
+  // 更新小窗
+  const float = document.getElementById("pomodoroFloat");
+  if (float) {
+    const timeEl = float.querySelector(".pomodoro-time");
+    if (timeEl) timeEl.textContent = timeStr;
+    const ring = float.querySelector(".pomodoro-ring-fg");
+    if (ring) ring.setAttribute("stroke-dashoffset", 2 * Math.PI * 54 * (1 - progress / 100));
+  }
+
+  // 更新全屏
+  const fs = document.getElementById("pomodoroFullscreen");
+  if (fs) {
+    const timeEl = fs.querySelector(".pomodoro-fullscreen-time");
+    if (timeEl) timeEl.textContent = timeStr;
+    const ring = fs.querySelector(".pomodoro-ring-fg");
+    if (ring) ring.setAttribute("stroke-dashoffset", 2 * Math.PI * 90 * (1 - progress / 100));
+  }
 }
 
 function pausePomodoro() {
@@ -266,3 +287,130 @@ function toggleStatsFold(foldId) {
     arrow.classList.remove('open');
   }
 }
+
+/* ── 番茄钟全屏切换 ── */
+
+function togglePomodoroFullscreen() {
+  if (!state.pomodoro) return;
+  state.pomodoro.isFullscreen = !state.pomodoro.isFullscreen;
+  render();
+}
+
+/* ── 全屏背景上传 ── */
+
+function uploadPomodoroBg() {
+  // 创建隐藏的 file input
+  let input = document.getElementById("pomodoroBgInput");
+  if (!input) {
+    input = document.createElement("input");
+    input.type = "file";
+    input.id = "pomodoroBgInput";
+    input.accept = "image/*";
+    input.className = "pomodoro-bg-input";
+    document.body.appendChild(input);
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (!state.pomodoro) return;
+        state.pomodoro.bgImage = reader.result;
+        // 保存到 localStorage 以便复用
+        try {
+          localStorage.setItem("pomodoroBgImage", reader.result);
+        } catch (e) { /* 忽略存储失败 */ }
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  input.click();
+}
+
+/* ── 悬浮窗拖拽 ── */
+
+function initPomodoroDrag() {
+  document.addEventListener("mousedown", (e) => {
+    const handle = e.target.closest("[data-drag-handle]");
+    if (!handle) return;
+    const floatId = handle.dataset.dragHandle;
+    const float = document.getElementById(floatId);
+    if (!float) return;
+
+    e.preventDefault();
+    const rect = float.getBoundingClientRect();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const origLeft = rect.left;
+    const origTop = rect.top;
+
+    float.classList.add("dragging");
+
+    const onMove = (ev) => {
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      float.style.left = (origLeft + dx) + "px";
+      float.style.top = (origTop + dy) + "px";
+      float.style.right = "auto";
+      float.style.bottom = "auto";
+    };
+
+    const onUp = () => {
+      float.classList.remove("dragging");
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  });
+
+  // 触摸支持
+  document.addEventListener("touchstart", (e) => {
+    const handle = e.target.closest("[data-drag-handle]");
+    if (!handle) return;
+    const floatId = handle.dataset.dragHandle;
+    const float = document.getElementById(floatId);
+    if (!float) return;
+
+    const touch = e.touches[0];
+    const rect = float.getBoundingClientRect();
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    const origLeft = rect.left;
+    const origTop = rect.top;
+
+    float.classList.add("dragging");
+
+    const onMove = (ev) => {
+      const t = ev.touches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      float.style.left = (origLeft + dx) + "px";
+      float.style.top = (origTop + dy) + "px";
+      float.style.right = "auto";
+      float.style.bottom = "auto";
+    };
+
+    const onUp = () => {
+      float.classList.remove("dragging");
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onUp);
+    };
+
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onUp);
+  });
+}
+
+// 页面加载时初始化拖拽
+document.addEventListener("DOMContentLoaded", () => {
+  initPomodoroDrag();
+  // 恢复背景图
+  try {
+    const saved = localStorage.getItem("pomodoroBgImage");
+    if (saved && state.pomodoro) {
+      state.pomodoro.bgImage = saved;
+    }
+  } catch (e) { /* 忽略 */ }
+});
