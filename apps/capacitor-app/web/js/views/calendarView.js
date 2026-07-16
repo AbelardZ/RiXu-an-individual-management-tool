@@ -34,11 +34,11 @@ function todayStatsSection() {
     <div class="today-stats-section">
       <div class="today-stats-header">
         <h3>数据看板</h3>
-      </div>
-      <div class="today-stats-controls">
-        <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="-1">‹</button>
-        <span class="today-stats-period">${periodLabel}</span>
-        <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="1">›</button>
+        <div class="today-stats-date-nav">
+          <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="-1">‹</button>
+          <span class="today-stats-period">${periodLabel}</span>
+          <button class="today-stats-arrow" data-action="shiftTimeStats" data-direction="1">›</button>
+        </div>
         <div class="today-stats-tabs">
           <button class="${period === 'day' ? 'active' : ''}" data-action="switchTimeStats" data-period="day">日</button>
           <button class="${period === 'week' ? 'active' : ''}" data-action="switchTimeStats" data-period="week">周</button>
