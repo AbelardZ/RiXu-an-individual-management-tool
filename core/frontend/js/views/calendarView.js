@@ -58,7 +58,7 @@ function todayStatsSection() {
           <span class="today-stats-label">完成任务</span>
         </div>
       </div>
-      ${stats.trend ? trendChart(stats.trend, period) : ""}
+      ${trendChart(stats.trend, period)}
       ${statsDetailBreakdown(stats)}
       ${statsBarChart(stats)}
     </div>
@@ -85,7 +85,17 @@ function formatStatsPeriodLabel(period, dateStr) {
 }
 
 function trendChart(trend, period) {
-  if (!trend || !trend.length) return "";
+  if (!trend || !trend.length) {
+    return `
+      <div class="trend-chart">
+        <div class="trend-legend">
+          <span class="trend-legend-item"><i style="background:var(--brand-60)"></i>专注分钟</span>
+          <span class="trend-legend-item"><i style="background:var(--brand-40)"></i>完成任务</span>
+        </div>
+        <div class="stats-detail-empty">暂无趋势数据，开始计时后自动生成</div>
+      </div>
+    `;
+  }
   const maxVal = Math.max(...trend.map(d => d.minutes || 0), 1);
   const maxTasks = Math.max(...trend.map(d => d.completed || 0), 1);
   const barW = 56;
@@ -118,7 +128,6 @@ function trendChart(trend, period) {
 function statsDetailBreakdown(stats) {
   const dailyTasks = stats.daily_tasks || [];
   const rangeCategories = stats.range_categories || [];
-  if (!dailyTasks.length && !rangeCategories.length) return "";
 
   return `
     <div class="stats-detail">
@@ -190,7 +199,6 @@ function statsFoldCol(title, items, itemType) {
 
 function statsBarChart(stats) {
   const categories = stats.range_categories || [];
-  if (!categories.length) return "";
 
   const items = categories.map(c => ({
     title: c.category_title || c.task_title || '未分类',
@@ -202,14 +210,14 @@ function statsBarChart(stats) {
   return `
     <div class="stats-bar-section">
       <div class="stats-bar-title">分类时长</div>
-      ${items.map(item => `
+      ${items.length ? items.map(item => `
         <div class="stats-bar-row">
           <span class="stats-bar-label">${escapeHtml(item.title)}</span>
           <div class="stats-bar-track">
             <div class="stats-bar-fill" style="width:${Math.max(Math.round(item.minutes / maxMin * 100), 2)}%">${item.minutes > 0 ? item.minutes + 'm' : ''}</div>
           </div>
         </div>
-      `).join("")}
+      `).join("") : `<div class="stats-detail-empty">暂无分类数据，开始计时后自动统计</div>`}
     </div>
   `;
 }
