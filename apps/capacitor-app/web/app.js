@@ -2366,12 +2366,12 @@ async function saveTag(data) {
 }
 
 async function saveRecordType(form, data) {
-  const payload = cleanPayload({
-    name: data.name,
-    color: data.color,
-    icon: data.icon,
+  const payload = {
+    name: data.name || null,
+    color: data.color || null,
+    icon: data.icon || null,
     enabled: data.enabled === "on" || data.enabled === true,
-  });
+  };
   if (data.id) {
     await request(`/record-types/${data.id}`, { method: "PATCH", body: JSON.stringify(payload) });
   } else {
