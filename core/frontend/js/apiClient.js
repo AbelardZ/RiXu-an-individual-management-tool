@@ -17,6 +17,10 @@ const API = (() => {
     const base = CapacitorPlatform.getApiBase();
     if (base) return base.replace(/\/$/, "") + "/api";
   }
+  // Electron 桌面端：直接请求云端 API
+  if (typeof dayOrderDesktop !== 'undefined') {
+    return "http://39.104.75.202/api";
+  }
   return "/api";
 })();
 
@@ -49,6 +53,9 @@ async function request(path, options = {}) {
   const isDelete = method === 'DELETE';
   const isAuth = path.startsWith('/auth/');
 
+  // 登录/注册必须走本地后端（创建本地 session）
+  const baseUrl = isAuth ? "/api" : API;
+
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
@@ -58,7 +65,7 @@ async function request(path, options = {}) {
   // ── 在线：正常请求 + 缓存 ──
   if (navigator.onLine) {
     try {
-      const response = await fetch(`${API}${path}`, { ...options, headers });
+      const response = await fetch(`${baseUrl}${path}`, { ...options, headers });
 
       if (!response.ok) {
         let detail = response.statusText;
