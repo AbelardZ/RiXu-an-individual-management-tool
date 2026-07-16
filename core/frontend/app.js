@@ -860,6 +860,8 @@ function showSplashThenRender() {
       baziPhrase = `${dayStem}${dayBranch} · ${dayWuXing}`;
     } catch { baziPhrase = ""; }
   }
+  // 标记 splash 进行中，阻止 render() 覆盖
+  state._splashActive = true;
   app.innerHTML = `
     <div class="splash-screen">
       <div class="splash-content">
@@ -877,6 +879,7 @@ function showSplashThenRender() {
   const finish = () => {
     if (splashDone) return;
     splashDone = true;
+    state._splashActive = false;
     render();
   };
   const timer = setTimeout(finish, 5000);
@@ -887,6 +890,8 @@ function showSplashThenRender() {
 }
 
 function render() {
+  // splash 进行中时不覆盖
+  if (state._splashActive) return;
   if (!state.token) {
     renderAuth();
     return;
