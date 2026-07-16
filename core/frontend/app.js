@@ -914,8 +914,8 @@ function resolveAssetUrl(url) {
   if (typeof CapacitorPlatform !== 'undefined') {
     return CapacitorPlatform.resolveUrl(url);
   }
-  // 相对路径资源（头像等）：非本地8000端口时补全云端URL
-  if (url.startsWith('/') && window.location.port && window.location.port !== '8000') {
+  // 相对路径资源（头像等）：如果 API 指向云端，资源也指向云端
+  if ((url.startsWith('/api/') || url.startsWith('/uploads/')) && API !== '/api') {
     return "http://39.104.75.202" + url;
   }
   return url;
