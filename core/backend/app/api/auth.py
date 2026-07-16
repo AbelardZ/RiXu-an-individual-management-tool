@@ -88,6 +88,12 @@ def register(payload: RegisterWithInviteRequest, request: Request, db: Session =
             pass
         else:
             save_offline_credentials(str(payload.email), payload.password)
+            # 云端注册成功，在本地也创建用户和 session
+            from app.services.auth import get_user_by_email
+            user = get_user_by_email(db, str(payload.email))
+            if user:
+                return _auth_response(db, user)
+            # 本地没有该用户，用云端返回的 token（后续同步会拉取用户数据）
             return AuthResponse(
                 access_token=result.get("access_token", ""),
                 expires_at=result.get("expires_at", ""),
@@ -136,6 +142,12 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)) -> AuthResponse:
             with urllib.request.urlopen(req, timeout=15) as resp:
                 result = json.loads(resp.read())
             save_offline_credentials(str(payload.email), payload.password)
+            # 在本地也创建 session，确保后续 API 请求能通过本地验证
+            from app.services.auth import get_user_by_email
+            user = get_user_by_email(db, str(payload.email))
+            if user:
+                return _auth_response(db, user)
+            # 本地没有该用户（新设备），用云端返回的 token
             return AuthResponse(
                 access_token=result.get("local_token", result.get("access_token", "")),
                 expires_at=result.get("expires_at", ""),
