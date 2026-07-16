@@ -2262,6 +2262,9 @@ a {
   padding: 6px;
   box-shadow: var(--shadow-2);
 }
+.toolbar:empty {
+  display: none;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    Buttons & Controls — Microsoft To Do Style
