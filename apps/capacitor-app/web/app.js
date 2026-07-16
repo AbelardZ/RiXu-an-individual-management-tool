@@ -1117,9 +1117,7 @@ function accountView() {
             <div class="account-data-actions">
               <div class="account-data-btns">
                 <button class="btn" data-action="openWorkspaceFolder">📂 打开本地备份目录</button>
-                <button class="btn" data-action="exportJSON">📄 导出 JSON</button>
-                <button class="btn" data-action="exportSQLite">🗄 导出数据库</button>
-                <button class="btn" data-action="exportFull">📦 导出完整包</button>
+                <button class="btn btn-primary" data-action="exportFull">📦 导出完整包</button>
               </div>
             </div>
           </div>
@@ -2005,25 +2003,18 @@ async function handleAction(target) {
     renderAuth();
   }
   if (action === "openWorkspaceFolder") {
-    try { await openFolder("workspace"); } catch { setToast("无法打开本地备份目录"); }
-  }
-  if (action === "exportJSON") {
-    try {
-      const result = await exportData("json");
-      setToast(`已导出: ${result.name}`);
-    } catch { setToast("导出失败"); }
-  }
-  if (action === "exportSQLite") {
-    try {
-      const result = await exportData("sqlite");
-      setToast(`已导出: ${result.name}`);
-    } catch { setToast("导出失败"); }
+    // Electron 桌面端：直接用 shell.openPath 打开工作区
+    if (window.__DAYORDER_ELECTRON__ && window.dayOrderDesktop?.revealWorkspace) {
+      try { await window.dayOrderDesktop.revealWorkspace(); } catch { setToast("无法打开本地备份目录"); }
+    } else {
+      try { await openFolder("workspace"); } catch { setToast("无法打开本地备份目录"); }
+    }
   }
   if (action === "exportFull") {
     try {
       const result = await exportData("full");
       setToast(`已导出: ${result.name}`);
-    } catch { setToast("导出失败"); }
+    } catch { setToast("导出失败，请确认后端服务已启动"); }
   }
 
   /* ── 番茄钟 & 任务日志 ── */
