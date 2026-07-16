@@ -914,8 +914,8 @@ function resolveAssetUrl(url) {
   if (typeof CapacitorPlatform !== 'undefined') {
     return CapacitorPlatform.resolveUrl(url);
   }
-  // Electron 桌面端：补全相对路径为云端绝对路径
-  if (typeof dayOrderDesktop !== 'undefined' && url.startsWith('/')) {
+  // 相对路径且不在本地开发服务器（端口 8000）→ 补全云端 URL
+  if (url.startsWith('/') && !window.location.port || window.location.port !== '8000') {
     return "http://39.104.75.202" + url;
   }
   return url;
