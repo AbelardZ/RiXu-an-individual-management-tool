@@ -7076,9 +7076,10 @@ a {
 }
 
 .splash-skip {
-  display: block;
-  margin: 0 auto;
-  padding: 6px 20px;
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  padding: 6px 16px;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 20px;
   background: rgba(255,255,255,0.5);
@@ -7087,6 +7088,7 @@ a {
   cursor: pointer;
   transition: all 0.2s;
   font-family: var(--font-sans);
+  z-index: 10;
 }
 
 .splash-skip:hover {
