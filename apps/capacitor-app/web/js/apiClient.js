@@ -17,8 +17,8 @@ const API = (() => {
     const base = CapacitorPlatform.getApiBase();
     if (base) return base.replace(/\/$/, "") + "/api";
   }
-  // Electron 桌面端：直接请求云端 API
-  if (typeof dayOrderDesktop !== 'undefined') {
+  // Electron 桌面端（端口非 8000）：直接请求云端 API
+  if (window.location.port && window.location.port !== '8000') {
     return "http://39.104.75.202/api";
   }
   return "/api";
