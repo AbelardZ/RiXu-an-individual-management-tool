@@ -512,6 +512,9 @@ async function bootstrap() {
   }
 
   if (!state.token) {
+    renderAuth();
+    return;
+  }
   try {
     state.user = await request("/auth/me");
     // 已登录用户刷新时也显示过渡动画
