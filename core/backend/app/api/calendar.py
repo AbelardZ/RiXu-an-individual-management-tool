@@ -39,7 +39,20 @@ WEEKDAY_LABELS = ["星期一", "星期二", "星期三", "星期四", "星期五
 def _calendar_meta(day: date) -> tuple[str, str, list[str]]:
     solar = Solar.fromYmd(day.year, day.month, day.day)
     lunar = solar.getLunar()
-    lunar_label = f"{lunar.getMonthInChinese()}月{lunar.getDayInChinese()}"
+    lunar_day = lunar.getDay()
+    lunar_month = lunar.getMonth()
+    
+    # 节气优先显示
+    jie_qi = lunar.getJieQi() or solar.getJieQi() or ""
+    if jie_qi:
+        lunar_label = jie_qi
+    elif lunar_day == 1:
+        # 初一显示月份
+        lunar_label = f"{lunar.getMonthInChinese()}月"
+    else:
+        # 其他日期只显示日子
+        lunar_label = lunar.getDayInChinese()
+    
     holidays = [name for name in [*solar.getFestivals(), *lunar.getFestivals()] if name]
     return WEEKDAY_LABELS[day.weekday()], lunar_label, holidays
 

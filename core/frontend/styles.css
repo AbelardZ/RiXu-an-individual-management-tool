@@ -1772,6 +1772,24 @@ a {
   transform: scale(0.97);
 }
 
+/* ── 日历月份按钮 ── */
+.cal-month-btn {
+  min-height: 36px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: var(--font-sans);
+}
+
+.cal-month-btn:hover {
+  color: var(--accent);
+}
+
 .btn.small {
   min-height: 30px;
   padding: 0 10px;
@@ -2117,7 +2135,8 @@ a {
 }
 
 .calendar-date-head h3 {
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.1;
 }
 

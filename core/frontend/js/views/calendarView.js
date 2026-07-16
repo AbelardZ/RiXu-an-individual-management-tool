@@ -77,7 +77,7 @@ function calendarView() {
   return `
     ${topbar("日历", MODULE_SUBTITLES.calendar, `
       <button class="icon-btn" data-action="prevMonth" title="上一月">‹</button>
-      <button class="btn" data-action="thisMonth">本月</button>
+      <button class="cal-month-btn" data-action="thisMonth">${state.calendarYear}年${state.calendarMonth}月</button>
       <button class="icon-btn" data-action="nextMonth" title="下一月">›</button>
       <button class="btn-link" data-action="openImportantDateSettings">管理重要日</button>
     `)}
@@ -124,7 +124,7 @@ function dayCell(day) {
   const cellClass = important ? "has-important" : holiday ? "has-holiday" : "";
   return `
     <button class="day-cell ${selected} ${cellClass}" data-date="${day.date}"${cellStyle}>
-      <div class="day-num"><span>${Number(day.date.slice(-2))}</span><small>${escapeHtml(day.weekday_label || "")}</small></div>
+      <div class="day-num"><span>${Number(day.date.slice(-2))}</span></div>
       <div class="calendar-day-notes">
         ${important ? `<span class="important-line">${escapeHtml(important.title)}</span>` : ""}
         ${holiday ? `<span class="holiday-line">${escapeHtml(holiday)}</span>` : ""}
