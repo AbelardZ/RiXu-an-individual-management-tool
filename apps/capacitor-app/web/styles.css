@@ -1742,7 +1742,7 @@ a {
 .control,
 .icon-btn {
   min-height: 36px;
-  border-radius: var(--radius);
+  border-radius: 8px;
   background: var(--surface);
   color: var(--ink);
   border: 1px solid var(--line);
@@ -2280,7 +2280,7 @@ a {
 .field textarea {
   width: 100%;
   border: 1px solid var(--neutral-20);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 9px 12px;
   background: var(--surface);
   color: var(--ink);
@@ -6909,7 +6909,7 @@ a {
 .auth-box {
   width: min(420px, 100%);
   padding: 40px 32px 32px;
-  border-radius: 16px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(44px) saturate(1.25);
   -webkit-backdrop-filter: blur(44px) saturate(1.25);
