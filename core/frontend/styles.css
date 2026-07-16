@@ -661,6 +661,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: center;
 }
 
 .nav-icon {
@@ -723,10 +724,12 @@ a {
 .side-date-picker .dt-picker-trigger {
   min-height: 32px;
   border-radius: var(--radius);
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  border: none;
   font-size: 12px;
   padding: 0 8px;
+  width: 100%;
+  text-align: center;
 }
 
 /* ── 同步按钮（小巧图标） ── */
@@ -738,17 +741,16 @@ a {
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: none;
   border-radius: var(--radius);
-  background: rgba(255,255,255,0.5);
+  background: transparent;
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
 }
 
 .side-sync-btn:hover {
-  background: rgba(255,255,255,0.8);
-  border-color: var(--line-strong);
+  background: rgba(26,79,160,0.08);
 }
 
 .side-sync-btn:active {
@@ -807,10 +809,10 @@ a {
 }
 
 .task-action-btn {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
   background: transparent;
   cursor: pointer;
   display: flex;
@@ -822,13 +824,12 @@ a {
 }
 
 .task-action-btn .nav-icon {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
 }
 
 .task-action-btn:hover {
-  background: rgba(0,120,212,0.06);
-  border-color: rgba(0,120,212,0.18);
+  background: rgba(26,79,160,0.08);
   color: var(--accent);
 }
 
