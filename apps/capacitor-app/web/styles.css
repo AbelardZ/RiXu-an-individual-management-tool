@@ -6886,20 +6886,14 @@ a {
   margin-bottom: 28px;
 }
 
-.auth-logo {
-  width: 64px;
-  height: 64px;
+.auth-logo-img {
+  width: 72px;
+  height: 72px;
   margin: 0 auto 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
-  font-size: 36px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
+  display: block;
   border-radius: 20px;
   box-shadow: 0 8px 28px rgba(185, 149, 106, 0.3);
+  object-fit: contain;
 }
 
 .auth-box h1 {
@@ -7009,21 +7003,15 @@ a {
   animation: splashUp 0.8s ease;
 }
 
-.splash-logo {
-  width: 88px;
-  height: 88px;
+.splash-logo-img {
+  width: 96px;
+  height: 96px;
   margin: 0 auto 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
-  font-size: 44px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #c9a96e 0%, #b8956a 100%);
+  display: block;
   border-radius: 24px;
   box-shadow: 0 12px 40px rgba(185, 149, 106, 0.35);
   animation: splashLogo 1s ease;
+  object-fit: contain;
 }
 
 .splash-welcome {

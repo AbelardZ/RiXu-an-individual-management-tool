@@ -510,11 +510,11 @@ async function bootstrap() {
   }
   try {
     state.user = await request("/auth/me");
+    // 已登录用户刷新时也显示过渡动画
+    showSplashThenRender();
     await loadView();
     updateSyncStatus();
     startAutoSync();
-    // 已登录用户刷新时也显示过渡动画
-    showSplashThenRender();
   } catch {
     localStorage.removeItem("dayorder.token");
     state.token = "";
@@ -623,7 +623,7 @@ function renderAuth(mode = "login") {
     <main class="auth">
       <section class="auth-box">
         <div class="auth-brand">
-          <div class="auth-logo">日</div>
+          <img class="auth-logo-img" src="/assets/dayorder.png" alt="日序" />
           <h1>日序</h1>
           <p class="auth-tagline">以日为序，知命而行</p>
         </div>
@@ -839,10 +839,10 @@ async function enterApp(result) {
   state.token = result.access_token;
   state.user = result.user;
   localStorage.setItem("dayorder.token", state.token);
+  // 先显示 splash，后台加载数据
+  showSplashThenRender();
   await loadBase();
   await loadView();
-  // 登录过渡动画
-  showSplashThenRender();
 }
 
 /* ── 登录过渡动画 ── */
@@ -863,7 +863,7 @@ function showSplashThenRender() {
   app.innerHTML = `
     <div class="splash-screen">
       <div class="splash-content">
-        <div class="splash-logo">日</div>
+        <img class="splash-logo-img" src="/assets/dayorder.png" alt="日序" />
         <div class="splash-welcome">日序</div>
         <div class="splash-name">${escapeHtml(nickname)}</div>
         ${baziPhrase ? `<div class="splash-bazi">${escapeHtml(baziPhrase)}</div>` : ""}
@@ -879,8 +879,11 @@ function showSplashThenRender() {
     splashDone = true;
     render();
   };
-  setTimeout(finish, 5000);
-  app.querySelector(".splash-skip")?.addEventListener("click", finish);
+  const timer = setTimeout(finish, 5000);
+  app.querySelector(".splash-skip")?.addEventListener("click", () => {
+    clearTimeout(timer);
+    finish();
+  });
 }
 
 function render() {

@@ -71,10 +71,13 @@ def get_storage_file(storage_id: int, group: str, filename: str, db: Session = D
 
 frontend_dir = Path(os.environ.get("DAYORDER_FRONTEND_DIR", Path(__file__).resolve().parents[2] / "frontend"))
 data_dir = Path(os.environ.get("DAYORDER_DATA_DIR", Path(__file__).resolve().parents[2] / "data"))
+assets_dir = Path(os.environ.get("DAYORDER_ASSETS_DIR", Path(__file__).resolve().parents[3] / "assets"))
 uploads_dir = settings.uploads_dir
 if uploads_dir.exists():
     app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 if data_dir.exists():
     app.mount("/data", StaticFiles(directory=data_dir), name="data")
+if assets_dir.exists():
+    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 if frontend_dir.exists():
     app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
