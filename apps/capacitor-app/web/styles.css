@@ -1627,19 +1627,60 @@ a {
   font-size: 13px;
 }
 
-/* ── 今日统计卡片（紧凑版） ── */
+/* ── 今日统计区 ── */
+
+.today-stats-section {
+  margin-top: 24px;
+}
+
+.today-stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.today-stats-header h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.today-stats-tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--neutral-8);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.today-stats-tabs button {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.today-stats-tabs button.active {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: var(--shadow-2);
+}
 
 .today-stats-card {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-top: 20px;
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.7);
-  border-radius: 16px;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: 8px;
   border: 1px solid var(--line);
-  backdrop-filter: blur(8px);
 }
 
 .today-stats-item {
@@ -1647,39 +1688,84 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-}
-
-.today-stats-icon {
-  font-size: 18px;
-  margin-bottom: 2px;
+  gap: 4px;
 }
 
 .today-stats-num {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 600;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .today-stats-num small {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--muted);
 }
 
 .today-stats-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .today-stats-divider {
   width: 1px;
-  height: 40px;
+  height: 44px;
   background: var(--line);
   flex-shrink: 0;
+}
+
+/* ── 折线图 ── */
+
+.trend-chart {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.trend-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.trend-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trend-legend-item i {
+  display: block;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.trend-svg {
+  width: 100%;
+  height: 80px;
+  overflow: visible;
+}
+
+.trend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.trend-labels span {
+  width: 44px;
+  text-align: center;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

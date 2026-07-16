@@ -8,14 +8,15 @@ function todayView() {
     ${topbar("今日", MODULE_SUBTITLES.today, "")}
     ${todayTopPanel()}
     ${detail ? dayDashboard(detail) : empty("正在加载今日内容")}
-    ${todayStatsCard()}
+    ${todayStatsSection()}
   `;
 }
 
-/* ── 今日统计卡片（紧凑版） ── */
+/* ── 今日统计区（数据看板 + 折线图） ── */
 
-function todayStatsCard() {
+function todayStatsSection() {
   const stats = state.timeStats;
+  const period = state.timeStatsPeriod || "day";
   if (!stats) return "";
 
   const totalMinutes = Math.floor((stats.total_seconds || 0) / 60);
@@ -26,33 +27,59 @@ function todayStatsCard() {
   const totalCompleted = dailyCompleted + rangeCompleted;
   const totalTasks = dailyTotal + rangeTotal;
 
-  // 统计今日番茄钟次数
-  const todaySessions = (stats.daily_tasks || []).reduce((sum, t) => sum + (t.session_count || 0), 0)
-    + (stats.range_reminders || []).reduce((sum, t) => sum + (t.session_count || 0), 0);
-
-  if (totalMinutes === 0 && totalTasks === 0 && todaySessions === 0) return "";
+  const periodLabels = { day: "今日", week: "本周", month: "本月" };
 
   return `
-    <div class="today-stats-card">
-      <div class="today-stats-item">
-        <span class="today-stats-icon">⏱</span>
-        <span class="today-stats-num">${totalMinutes}</span>
-        <span class="today-stats-label">专注分钟</span>
+    <div class="today-stats-section">
+      <div class="today-stats-header">
+        <h3>数据看板</h3>
+        <div class="today-stats-tabs">
+          <button class="${period === 'day' ? 'active' : ''}" data-action="switchTimeStats" data-period="day">日</button>
+          <button class="${period === 'week' ? 'active' : ''}" data-action="switchTimeStats" data-period="week">周</button>
+          <button class="${period === 'month' ? 'active' : ''}" data-action="switchTimeStats" data-period="month">月</button>
+        </div>
       </div>
-      <div class="today-stats-divider"></div>
-      <div class="today-stats-item">
-        <span class="today-stats-icon">✅</span>
-        <span class="today-stats-num">${totalCompleted}${totalTasks > 0 ? `<small>/${totalTasks}</small>` : ''}</span>
-        <span class="today-stats-label">完成任务</span>
+      <div class="today-stats-card">
+        <div class="today-stats-item">
+          <span class="today-stats-num">${totalMinutes}</span>
+          <span class="today-stats-label">专注分钟</span>
+        </div>
+        <div class="today-stats-divider"></div>
+        <div class="today-stats-item">
+          <span class="today-stats-num">${totalCompleted}<small>/${totalTasks}</small></span>
+          <span class="today-stats-label">完成任务</span>
+        </div>
       </div>
-      <div class="today-stats-divider"></div>
-      <div class="today-stats-item">
-        <span class="today-stats-icon">🍅</span>
-        <span class="today-stats-num">${todaySessions}</span>
-        <span class="today-stats-label">番茄钟</span>
+      ${stats.trend ? trendChart(stats.trend, period) : ""}
+    </div>
+  `;
+}
+
+function trendChart(trend, period) {
+  if (!trend || !trend.length) return "";
+  const maxVal = Math.max(...trend.map(d => d.minutes || 0), 1);
+  const maxTasks = Math.max(...trend.map(d => d.completed || 0), 1);
+  const w = trend.length * 44;
+  const h = 80;
+  const pointsMinutes = trend.map((d, i) => `${i * 44 + 22},${h - (d.minutes || 0) / maxVal * h}`).join(" ");
+  const pointsTasks = trend.map((d, i) => `${i * 44 + 22},${h - (d.completed || 0) / maxTasks * h}`).join(" ");
+
+  return `
+    <div class="trend-chart">
+      <div class="trend-legend">
+        <span class="trend-legend-item"><i style="background:var(--brand-60)"></i>专注分钟</span>
+        <span class="trend-legend-item"><i style="background:var(--brand-40)"></i>完成任务</span>
+      </div>
+      <svg viewBox="0 0 ${w} ${h}" class="trend-svg" preserveAspectRatio="none">
+        <polyline points="${pointsMinutes}" fill="none" stroke="var(--brand-60)" stroke-width="2" vector-effect="non-scaling-stroke" />
+        <polyline points="${pointsTasks}" fill="none" stroke="var(--brand-40)" stroke-width="2" stroke-dasharray="4,3" vector-effect="non-scaling-stroke" />
+      </svg>
+      <div class="trend-labels">
+        ${trend.map(d => `<span>${d.label || ''}</span>`).join("")}
       </div>
     </div>
   `;
+}
 }
 
 function dayDashboard(detail) {
