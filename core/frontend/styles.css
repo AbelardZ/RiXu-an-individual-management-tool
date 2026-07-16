@@ -1634,10 +1634,7 @@ a {
 }
 
 .today-stats-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .today-stats-header h3 {
@@ -1646,10 +1643,12 @@ a {
   color: var(--ink);
 }
 
-.today-stats-nav {
+.today-stats-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  margin-bottom: 12px;
 }
 
 .today-stats-arrow {
