@@ -267,7 +267,7 @@ a {
 
 .account-card-modern {
   background: var(--surface-raised);
-  border-radius: var(--radius-xl);
+  border-radius: 16px;
   box-shadow: var(--shadow-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
