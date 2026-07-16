@@ -923,11 +923,10 @@ function render() {
           <div class="side-date-picker">
             ${datePickerHtml("sideDatePicker", state.selectedDate)}
           </div>
-          <div class="side-sync-status" id="syncIndicator" title="${escapeHtml(state.syncMessage || '同步状态')}">
+          <button class="side-sync-btn" id="syncIndicator" data-action="manualSync" title="${escapeHtml(state.syncMessage || '点击同步')}">
             <span class="sync-dot ${state.syncStatus}"></span>
             <span class="sync-label">${syncStatusLabel()}</span>
-          </div>
-          <button class="btn text" data-action="manualSync" style="width:100%;margin-bottom:4px;font-size:11px;">🔄 立即同步</button>
+          </button>
           <button class="btn danger" data-action="logout">退出登录</button>
         </div>
       </aside>

@@ -17,12 +17,12 @@
   --neutral-100: #1b1a19;
 
   /* ── 品牌色 ── */
-  --brand-10: #e8edf5;
-  --brand-20: #b8c8e8;
-  --brand-40: #4a6db5;
-  --brand-60: #001c76;
-  --brand-70: #00155e;
-  --brand-80: #000e3d;
+  --brand-10: #eaf0f8;
+  --brand-20: #c4d4ed;
+  --brand-40: #5b82c0;
+  --brand-60: #1a4fa0;
+  --brand-70: #143d80;
+  --brand-80: #0d2b60;
 
   /* ── 语义色 ── */
   --green-10: #dff6dd;
@@ -721,17 +721,32 @@ a {
   padding: 0 10px;
 }
 
-/* ── 同步状态指示器 ── */
+/* ── 同步按钮（状态+操作二合一） ── */
 
-.side-sync-status {
+.side-sync-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.5);
   font-size: 12px;
   color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+
+.side-sync-btn:hover {
+  background: rgba(255,255,255,0.8);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.side-sync-btn:active {
+  background: var(--surface-pressed);
 }
 
 .sync-dot {
@@ -743,7 +758,7 @@ a {
 
 .sync-dot.online { background: #27ae60; }
 .sync-dot.offline { background: #b0b0b0; }
-.sync-dot.syncing { background: #f39c12; animation: syncPulse 0.8s ease-in-out infinite; }
+.sync-dot.syncing { background: var(--brand-60); animation: syncPulse 0.8s ease-in-out infinite; }
 .sync-dot.synced { background: #27ae60; }
 .sync-dot.error { background: #e74c3c; }
 
@@ -754,6 +769,8 @@ a {
 
 .sync-label {
   white-space: nowrap;
+  flex: 1;
+  text-align: left;
 }
 
 /* ── 备份操作按钮 ── */
@@ -6863,9 +6880,9 @@ a {
   place-items: center;
   padding: 28px;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(0, 28, 118, 0.06), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(0, 28, 118, 0.04), transparent 60%),
-    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(74, 109, 181, 0.03), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(26, 79, 160, 0.06), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(26, 79, 160, 0.04), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 30% 60%, rgba(91, 130, 192, 0.03), transparent 60%),
     linear-gradient(180deg, #e8ecf2 0%, #eef1f6 45%, #f0f3f7 100%);
 }
 
@@ -6892,7 +6909,7 @@ a {
   margin: 0 auto 16px;
   display: block;
   border-radius: 20px;
-  box-shadow: 0 8px 28px rgba(0, 28, 118, 0.2);
+  box-shadow: 0 8px 28px rgba(26, 79, 160, 0.2);
   object-fit: contain;
 }
 
@@ -7010,7 +7027,7 @@ a {
   margin: 0 auto 24px;
   display: block;
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 28, 118, 0.2);
+  box-shadow: 0 12px 40px rgba(26, 79, 160, 0.2);
   animation: splashLogo 1s ease;
   object-fit: contain;
 }
