@@ -65,26 +65,8 @@ async function startPomodoro(taskType, taskId, taskTitle) {
 
     startPomodoroTick();
     render();
-    // Electron: 弹出独立悬浮窗
-    openPomodoroFloatWindow();
   } catch (error) {
     setToast("启动番茄钟失败: " + error.message);
-  }
-}
-
-async function openPomodoroFloatWindow() {
-  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.openPomodoroFloat) {
-    try {
-      await dayOrderDesktop.openPomodoroFloat({});
-    } catch (e) { /* 非 Electron 环境忽略 */ }
-  }
-}
-
-async function closePomodoroFloatWindow() {
-  if (typeof dayOrderDesktop !== 'undefined' && dayOrderDesktop.closePomodoroFloat) {
-    try {
-      await dayOrderDesktop.closePomodoroFloat();
-    } catch (e) { /* ignore */ }
   }
 }
 
@@ -172,7 +154,6 @@ async function stopPomodoro() {
 
   state.pomodoro.active = false;
   state.pomodoro.status = "idle";
-  closePomodoroFloatWindow();
 
   if (sessionId) {
     try {
@@ -196,7 +177,6 @@ async function completePomodoro() {
 
   state.pomodoro.active = false;
   state.pomodoro.status = "idle";
-  closePomodoroFloatWindow();
 
   if (sessionId) {
     try {

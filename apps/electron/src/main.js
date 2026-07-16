@@ -350,53 +350,6 @@ ipcMain.handle("desktop:reveal-workspace", async () => {
   if (workspacePath) await shell.openPath(workspacePath);
 });
 
-/* ── 番茄钟悬浮窗（独立桌面窗口） ── */
-
-let pomodoroFloatWindow = null;
-
-ipcMain.handle("desktop:open-pomodoro-float", async (_event, data) => {
-  if (pomodoroFloatWindow && !pomodoroFloatWindow.isDestroyed()) {
-    pomodoroFloatWindow.focus();
-    return;
-  }
-  pomodoroFloatWindow = new BrowserWindow({
-    width: 220,
-    height: 280,
-    x: data?.x || undefined,
-    y: data?.y || undefined,
-    title: "专注",
-    icon: iconPath(),
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    resizable: false,
-    skipTaskbar: true,
-    hasShadow: true,
-    backgroundColor: "#00000000",
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false,
-    },
-  });
-  pomodoroFloatWindow.setVisibleOnAllWorkspaces(true);
-  pomodoroFloatWindow.loadURL(`http://127.0.0.1:${backendPort}/?float=pomodoro`);
-  pomodoroFloatWindow.on("closed", () => { pomodoroFloatWindow = null; });
-});
-
-ipcMain.handle("desktop:close-pomodoro-float", () => {
-  if (pomodoroFloatWindow && !pomodoroFloatWindow.isDestroyed()) {
-    pomodoroFloatWindow.close();
-  }
-});
-
-ipcMain.handle("desktop:set-pomodoro-float-size", (_event, { width, height }) => {
-  if (pomodoroFloatWindow && !pomodoroFloatWindow.isDestroyed()) {
-    pomodoroFloatWindow.setSize(width, height);
-  }
-});
-
 /* ── 背景图持久化 ── */
 
 const pomodoroBgPath = () => path.join(userDataDir, "pomodoro-bg.txt");
