@@ -849,6 +849,7 @@ async function enterApp(result) {
 
 function showSplashThenRender() {
   const nickname = state.user?.profile?.nickname || state.user?.email?.split("@")[0] || "日序";
+  const signature = state.user?.profile?.signature || "";
   const bazi = state.user?.profile?.bazi_result_json;
   let baziPhrase = "";
   if (bazi) {
@@ -865,10 +866,16 @@ function showSplashThenRender() {
   app.innerHTML = `
     <div class="splash-screen">
       <div class="splash-content">
-        <img class="splash-logo-img" src="/assets/dayorder.png" alt="日序" />
-        <div class="splash-welcome">日序</div>
-        <div class="splash-name">${escapeHtml(nickname)}</div>
-        ${baziPhrase ? `<div class="splash-bazi">${escapeHtml(baziPhrase)}</div>` : ""}
+        <div class="splash-brand">
+          <img class="splash-logo-img" src="/assets/dayorder.png" alt="日序" />
+          <h1 class="splash-title">日序</h1>
+          <p class="splash-subtitle">以日为序，知命而行</p>
+        </div>
+        <div class="splash-user">
+          <div class="splash-name">${escapeHtml(nickname)}</div>
+          ${signature ? `<div class="splash-signature">${escapeHtml(signature)}</div>` : ""}
+          ${baziPhrase ? `<div class="splash-bazi">${escapeHtml(baziPhrase)}</div>` : ""}
+        </div>
         <div class="splash-bar"><div class="splash-bar-fill"></div></div>
         <button class="splash-skip" data-action="skipSplash">跳过</button>
       </div>

@@ -7022,38 +7022,66 @@ a {
 .splash-content {
   text-align: center;
   animation: splashUp 0.8s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── 品牌区 ── */
+.splash-brand {
+  margin-bottom: 48px;
 }
 
 .splash-logo-img {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 24px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
   display: block;
-  border-radius: 24px;
+  border-radius: 20px;
   box-shadow: 0 12px 40px rgba(26, 79, 160, 0.2);
   animation: splashLogo 1s ease;
   object-fit: contain;
 }
 
-.splash-welcome {
-  font-size: 14px;
+.splash-title {
+  font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
+  font-size: 42px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.splash-subtitle {
+  font-size: 13px;
   color: var(--muted);
-  margin-bottom: 6px;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
 }
 
+/* ── 用户信息区 ── */
+.splash-user {
+  margin-bottom: 32px;
+}
+
 .splash-name {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+.splash-signature {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-style: italic;
 }
 
 .splash-bazi {
   font-size: 14px;
   color: var(--accent-text);
-  margin-bottom: 24px;
   letter-spacing: 1px;
   font-family: "STZhongsong", "华文中宋", "Noto Serif SC", "Songti SC", STSong, var(--font-serif);
 }
