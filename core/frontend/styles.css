@@ -804,9 +804,9 @@ a {
 }
 
 .task-action-btn {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(0,0,0,0.06);
+  width: 32px;
+  height: 32px;
+  border: none;
   border-radius: 6px;
   background: transparent;
   cursor: pointer;
@@ -819,13 +819,12 @@ a {
 }
 
 .task-action-btn .nav-icon {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
 }
 
 .task-action-btn:hover {
   background: rgba(0,120,212,0.06);
-  border-color: rgba(0,120,212,0.18);
   color: var(--accent);
 }
 
